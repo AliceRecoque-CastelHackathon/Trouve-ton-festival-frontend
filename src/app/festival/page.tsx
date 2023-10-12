@@ -15,13 +15,13 @@ import { Stack } from '@mui/material';
 
 export default function FestivalList() {
   const libraries = useMemo(() => ['places'], []);
-  const [geoPosX, setGeoPosX] = useState(0);
-  const [geoPosY, setGeoPosY] = useState(0);
+  const [geoPosX, setGeoPosX] = useState(3.900041);
+  const [geoPosY, setGeoPosY] = useState(43.6323496);
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY as string,
     libraries: libraries as any,
   });
-  const mapCenter = useState({ lat: geoPosX, lng: geoPosY });
+  const mapCenter = useState({ lat: geoPosY, lng: geoPosX });
 
   const mapOptions = useMemo<google.maps.MapOptions>(
     () => ({
@@ -57,6 +57,14 @@ export default function FestivalList() {
   else
     return (
       <>
+        <GoogleMap
+          options={mapOptions}
+          zoom={14}
+          center={{ lng: geoPosX, lat: geoPosY }}
+          mapTypeId={google.maps.MapTypeId.ROADMAP}
+          mapContainerStyle={{ width: '800px', height: '800px' }}
+          onLoad={() => console.log('Map Component Loaded...')}
+        ></GoogleMap>
         {festivals.results?.map((festival, index: number) => {
           const handleClickOnMap = (
             event: React.MouseEvent<HTMLDivElement>,
@@ -66,17 +74,10 @@ export default function FestivalList() {
           };
           return (
             <Stack direction={'row-reverse'}>
-              <GoogleMap
-                options={mapOptions}
-                zoom={14}
-                center={{ lat: mapCenter[0].lat, lng: mapCenter[0].lng }}
-                mapTypeId={google.maps.MapTypeId.ROADMAP}
-                mapContainerStyle={{ width: '800px', height: '800px' }}
-                onLoad={() => console.log('Map Component Loaded...')}
-              ></GoogleMap>
               <Card
                 key={index}
                 sx={{
+                  cursor: 'pointer',
                   marginTop: 2,
                   marginLeft: 2,
                   borderRadius: 2,
