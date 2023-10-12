@@ -57,7 +57,21 @@ const NavBar = () => {
       </AppBar>
     </>
   ) : (
-    <></>
+    <>
+      <Stack justifyContent={'space-between'} direction={'row'}>
+        <Button
+          color="inherit"
+          onClick={() => {
+            router.push(TextLinkHrefEnum.festivalList);
+          }}
+        >
+          Liste des festivals
+        </Button>
+        <IconButton onClick={() => router.push(TextLinkHrefEnum.home)}>
+          <HomeIcon />
+        </IconButton>
+      </Stack>
+    </>
   );
 };
 
