@@ -22,7 +22,14 @@ import { useUserContext } from '@/utils/contexts/UserContext';
 export default function UserUpdateForm() {
   const apiService: ApiService = new ApiService();
   const router = useRouter();
-  const [lastname, setLastname] = useState<string>('');
+  const [lastname, setLastname]= useState<string>("");
+  const [FestivalName, setFestivalName] = useState<string>('');
+  const [FestivalAdress, setFestivalAdress] = useState<string>('');
+  const [FestivalWeb, setFestivalWeb] = useState<string>('');
+  const [FestivalEmail, setFestivalEmail] = useState<string>('');
+  const [FestivalCategorie, setFestivalCategorie] = useState<string>('');
+  const [FestivalOrganisateur, setFestivalOrganisateur] = useState<string>('');
+  const [FestivalDate, setFestivalDate] = useState<string>('')
   const [firstname, setFirstname] = useState<string>('');
   const { userDataLoggedIn, setUserDataLoggedIn } = useUserContext();
 
@@ -48,19 +55,64 @@ export default function UserUpdateForm() {
   return (
     <Container maxWidth="xs">
       <TextField
-        label="Nom"
+        label="Nom du festival"
         type="text"
-        value={lastname}
-        onChange={(e) => setLastname(e.target.value)}
+        value={FestivalName}
+        onChange={(e) => setFestivalName(e.target.value)}
         fullWidth
         required
         margin="normal"
       />
       <TextField
-        label="Prénom :"
+        label="Adress du festival :"
         type="text"
-        value={firstname}
-        onChange={(e) => setFirstname(e.target.value)}
+        value={FestivalAdress}
+        onChange={(e) => setFestivalAdress(e.target.value)}
+        fullWidth
+        required
+        margin="normal"
+      />
+      <TextField
+        label="Site we du festival :"
+        type="text"
+        value={FestivalWeb}
+        onChange={(e) => setFestivalWeb(e.target.value)}
+        fullWidth
+        required
+        margin="normal"
+      />
+      <TextField
+        label="Email :"
+        type="text"
+        value={FestivalEmail}
+        onChange={(e) => setFestivalEmail(e.target.value)}
+        fullWidth
+        required
+        margin="normal"
+      />
+      <TextField
+        label="Categorie :"
+        type="text"
+        value={FestivalCategorie}
+        onChange={(e) => setFestivalCategorie(e.target.value)}
+        fullWidth
+        required
+        margin="normal"
+      />
+      <TextField
+        label="Organisateur :"
+        type="text"
+        value={FestivalOrganisateur}
+        onChange={(e) => setFestivalOrganisateur(e.target.value)}
+        fullWidth
+        required
+        margin="normal"
+      />
+      <TextField
+        label="Date :"
+        type="text"
+        value={FestivalDate}
+        onChange={(e) => setFestivalDate(e.target.value)}
         fullWidth
         required
         margin="normal"
