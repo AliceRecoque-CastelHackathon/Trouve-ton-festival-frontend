@@ -70,6 +70,14 @@ const NavBar = () => {
         <IconButton onClick={() => router.push(TextLinkHrefEnum.home)}>
           <HomeIcon />
         </IconButton>
+        <Button
+          color="inherit"
+          onClick={() => {
+            router.push(TextLinkHrefEnum.login);
+          }}
+        >
+          Login
+        </Button>
       </Stack>
     </>
   );

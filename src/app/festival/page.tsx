@@ -7,26 +7,23 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import {
   ApiService,
-  FestivalGetAnyDto,
+  FestivalGetManyDto,
   FestivalGetDto,
 } from '../../services/api.service';
 import Link from 'next/link';
-import {
-  GoogleMap,
-  Marker,
-  MarkerF,
-  useLoadScript,
-} from '@react-google-maps/api';
-import { Stack } from '@mui/material';
+import { Button, Stack } from '@mui/material';
 import Map from '@/components/festivalPage/Map';
+import { useRouter } from 'next/navigation';
 
 export default function FestivalList() {
+  const router = useRouter();
   const [festivalArray, setFestivalArray] = useState<FestivalGetDto[]>([]);
   const [error, setError] = useState(null);
   const [geoPosX, setGeoPosX] = useState(3.900041);
   const [geoPosY, setGeoPosY] = useState(43.6323496);
   const [loading, setLoading] = useState(true);
   const apiService: ApiService = new ApiService();
+  const [marker, setMarker] = React.useState<google.maps.Marker>();
 
   useEffect(() => {
     fetchData();
@@ -37,11 +34,13 @@ export default function FestivalList() {
       const festivalListResult: FestivalGetDto[] =
         await apiService.festivalGetMany({
           offset: undefined,
-          limit: 100,
+          limit: 10,
           region: undefined,
           categoryId: undefined,
-        } as FestivalGetAnyDto);
+        } as FestivalGetManyDto);
+      console.log(festivalListResult);
       setFestivalArray(festivalListResult);
+
       setLoading(false);
     } catch (e) {
       setError(error);
@@ -50,15 +49,19 @@ export default function FestivalList() {
   };
   return (
     <>
+      <Button onClick={() => router.push('/festival/create')}>
+        Ajouter un évènement
+      </Button>
       <Map />
       {festivalArray?.map((festival, index: number) => {
         console.log(festival);
         const handleClickOnMap = (event: React.MouseEvent<HTMLDivElement>) => {
-          setGeoPosX(festival.geocodage_xy.lon);
-          setGeoPosY(festival.geocodage_xy.lat);
+          setGeoPosX(festival.geoPosX);
+          setGeoPosY(festival.geoPosY);
+          setMarker(marker);
         };
         return (
-          <Stack direction={'row-reverse'}>
+          <Stack key={index} direction={'row-reverse'}>
             <Card
               key={index}
               sx={{
@@ -78,18 +81,21 @@ export default function FestivalList() {
                   Festival
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Nom: {festival.nom_du_festival}
+                  Nom: {festival.name}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Lieu: {festival.adresse_postale}
+                  Lieu: {festival.adress}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Organisateur : {festival.libelle_epci_collage_en_valeur}
+                  Date: {festival.creationDate}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Site internet: {festival.website}
                 </Typography>
               </CardContent>
               <CardActions>
                 <Link
-                  href={'./../festival?idFestival=' + festival.id}
+                  href={'./../festival/detail?idFestival=' + festival.id}
                   style={{ textDecoration: 'none', margin: 'auto' }}
                 >
                   Details
