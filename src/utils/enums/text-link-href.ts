@@ -6,4 +6,6 @@ export enum TextLinkHrefEnum {
   profileList = '/profilesList',
   profile = '/profile',
   home = '/',
+  festival = '/festivalDetail',
+  festivalList = '/festivalList',
 }

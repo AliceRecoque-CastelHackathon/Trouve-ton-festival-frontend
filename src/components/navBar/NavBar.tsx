@@ -25,6 +25,14 @@ const NavBar = () => {
           >
             Liste des profils
           </Button>
+          <Button
+            color="inherit"
+            onClick={() => {
+              router.push(TextLinkHrefEnum.festivalList);
+            }}
+          >
+            Liste des festivals
+          </Button>
           <Stack direction={'row'}>
             <Button
               color="inherit"

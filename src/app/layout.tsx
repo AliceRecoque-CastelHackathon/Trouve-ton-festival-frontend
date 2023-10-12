@@ -8,8 +8,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Next template',
-  description: 'boiler plate for next.js',
+  title: 'Trouve ton festival',
+  description:
+    'met toi en relation avec les festivaliers de ta région et trouve ton festival',
 };
 
 export default function RootLayout({
