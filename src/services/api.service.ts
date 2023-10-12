@@ -8,1392 +8,1467 @@
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 
-const API_BASED_URL = "http://localhost:3003";
+const API_BASED_URL = process.env.NEXT_PUBLIC_API_BASED_URL ?? '';
 
 import axios, {
-	AxiosError,
-	AxiosInstance,
-	AxiosRequestConfig,
-	AxiosResponse,
-	CancelToken,
-} from "axios";
+  AxiosError,
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+  CancelToken,
+} from 'axios';
 
-import * as moment from "moment";
+import * as moment from 'moment';
 
 export class ApiService {
-	private instance: AxiosInstance;
-	private baseUrl: string;
-	protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
-		undefined;
+  private instance: AxiosInstance;
+  private baseUrl: string;
+  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
+    undefined;
 
-	constructor(baseUrl?: string, instance?: AxiosInstance) {
-		this.instance = instance ? instance : axios.create();
+  constructor(baseUrl?: string, instance?: AxiosInstance) {
+    this.instance = instance ? instance : axios.create();
 
-		this.baseUrl =
-			baseUrl !== undefined && baseUrl !== null ? baseUrl : API_BASED_URL;
+    this.baseUrl =
+      baseUrl !== undefined && baseUrl !== null ? baseUrl : API_BASED_URL;
 
-		const token = localStorage?.getItem("access_token") ?? "";
+    const token = localStorage?.getItem('access_token') ?? '';
 
-		if (token) {
-			this.instance.defaults.headers.common["Authorization"] =
-				"Bearer " + token;
-		} else {
-			this.instance.defaults.headers.common["Authorization"] = "";
-		}
-	}
-
-    /**
-     * @return A list of all users
-     */
-    userAll( cancelToken?: CancelToken | undefined): Promise<UserGetDto[]> {
-        let url_ = this.baseUrl + "/user/all";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "application/json"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processUserAll(_response);
-        });
+    if (token) {
+      this.instance.defaults.headers.common['Authorization'] =
+        'Bearer ' + token;
+    } else {
+      this.instance.defaults.headers.common['Authorization'] = '';
     }
+  }
 
-    protected processUserAll(response: AxiosResponse): Promise<UserGetDto[]> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        {
-            const _responseText = response.data;
-            let resultdefault: any = null;
-            let resultDatadefault  = _responseText;
-            if (Array.isArray(resultDatadefault)) {
-                resultdefault = [] as any;
-                for (let item of resultDatadefault)
-                    resultdefault!.push(UserGetDto.fromJS(item));
-            }
-            else {
-                resultdefault = <any>null;
-            }
-            return Promise.resolve<UserGetDto[]>(resultdefault);
+  /**
+   * @return A list of all users
+   */
+  userAll(cancelToken?: CancelToken | undefined): Promise<UserGetDto[]> {
+    let url_ = this.baseUrl + '/user/all';
+    url_ = url_.replace(/[?&]$/, '');
 
+    let options_: AxiosRequestConfig = {
+      method: 'GET',
+      url: url_,
+      headers: {
+        Accept: 'application/json',
+      },
+      cancelToken,
+    };
+
+    return this.instance
+      .request(options_)
+      .catch((_error: any) => {
+        if (isAxiosError(_error) && _error.response) {
+          return _error.response;
+        } else {
+          throw _error;
         }
+      })
+      .then((_response: AxiosResponse) => {
+        return this.processUserAll(_response);
+      });
+  }
+
+  protected processUserAll(response: AxiosResponse): Promise<UserGetDto[]> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && typeof response.headers === 'object') {
+      for (let k in response.headers) {
+        if (response.headers.hasOwnProperty(k)) {
+          _headers[k] = response.headers[k];
+        }
+      }
     }
-
-    /**
-     * @return The user with specified id
-     */
-    userById(id: number, cancelToken?: CancelToken | undefined): Promise<UserGetDto> {
-        let url_ = this.baseUrl + "/user/byId/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "application/json"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processUserById(_response);
-        });
+    {
+      const _responseText = response.data;
+      let resultdefault: any = null;
+      let resultDatadefault = _responseText;
+      if (Array.isArray(resultDatadefault)) {
+        resultdefault = [] as any;
+        for (let item of resultDatadefault)
+          resultdefault!.push(UserGetDto.fromJS(item));
+      } else {
+        resultdefault = <any>null;
+      }
+      return Promise.resolve<UserGetDto[]>(resultdefault);
     }
+  }
 
-    protected processUserById(response: AxiosResponse): Promise<UserGetDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        {
-            const _responseText = response.data;
-            let resultdefault: any = null;
-            let resultDatadefault  = _responseText;
-            resultdefault = UserGetDto.fromJS(resultDatadefault);
-            return Promise.resolve<UserGetDto>(resultdefault);
+  /**
+   * @return The user with specified id
+   */
+  userById(
+    id: number,
+    cancelToken?: CancelToken | undefined,
+  ): Promise<UserGetDto> {
+    let url_ = this.baseUrl + '/user/byId/{id}';
+    if (id === undefined || id === null)
+      throw new Error("The parameter 'id' must be defined.");
+    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+    url_ = url_.replace(/[?&]$/, '');
 
+    let options_: AxiosRequestConfig = {
+      method: 'GET',
+      url: url_,
+      headers: {
+        Accept: 'application/json',
+      },
+      cancelToken,
+    };
+
+    return this.instance
+      .request(options_)
+      .catch((_error: any) => {
+        if (isAxiosError(_error) && _error.response) {
+          return _error.response;
+        } else {
+          throw _error;
         }
+      })
+      .then((_response: AxiosResponse) => {
+        return this.processUserById(_response);
+      });
+  }
+
+  protected processUserById(response: AxiosResponse): Promise<UserGetDto> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && typeof response.headers === 'object') {
+      for (let k in response.headers) {
+        if (response.headers.hasOwnProperty(k)) {
+          _headers[k] = response.headers[k];
+        }
+      }
     }
-
-    /**
-     * @return The user with specified email
-     */
-    userByEmail(body: StringEmailDto, cancelToken?: CancelToken | undefined): Promise<UserGetDto> {
-        let url_ = this.baseUrl + "/user/byEmail";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "POST",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processUserByEmail(_response);
-        });
+    {
+      const _responseText = response.data;
+      let resultdefault: any = null;
+      let resultDatadefault = _responseText;
+      resultdefault = UserGetDto.fromJS(resultDatadefault);
+      return Promise.resolve<UserGetDto>(resultdefault);
     }
+  }
 
-    protected processUserByEmail(response: AxiosResponse): Promise<UserGetDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        {
-            const _responseText = response.data;
-            let resultdefault: any = null;
-            let resultDatadefault  = _responseText;
-            resultdefault = UserGetDto.fromJS(resultDatadefault);
-            return Promise.resolve<UserGetDto>(resultdefault);
+  /**
+   * @return The user with specified email
+   */
+  userByEmail(
+    body: StringEmailDto,
+    cancelToken?: CancelToken | undefined,
+  ): Promise<UserGetDto> {
+    let url_ = this.baseUrl + '/user/byEmail';
+    url_ = url_.replace(/[?&]$/, '');
 
+    const content_ = JSON.stringify(body);
+
+    let options_: AxiosRequestConfig = {
+      data: content_,
+      method: 'POST',
+      url: url_,
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      cancelToken,
+    };
+
+    return this.instance
+      .request(options_)
+      .catch((_error: any) => {
+        if (isAxiosError(_error) && _error.response) {
+          return _error.response;
+        } else {
+          throw _error;
         }
+      })
+      .then((_response: AxiosResponse) => {
+        return this.processUserByEmail(_response);
+      });
+  }
+
+  protected processUserByEmail(response: AxiosResponse): Promise<UserGetDto> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && typeof response.headers === 'object') {
+      for (let k in response.headers) {
+        if (response.headers.hasOwnProperty(k)) {
+          _headers[k] = response.headers[k];
+        }
+      }
     }
-
-    /**
-     * @return The updated user
-     */
-    userUpdate(body: UserUpdateDto, cancelToken?: CancelToken | undefined): Promise<UserGetDto> {
-        let url_ = this.baseUrl + "/user/update";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "PUT",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processUserUpdate(_response);
-        });
+    {
+      const _responseText = response.data;
+      let resultdefault: any = null;
+      let resultDatadefault = _responseText;
+      resultdefault = UserGetDto.fromJS(resultDatadefault);
+      return Promise.resolve<UserGetDto>(resultdefault);
     }
+  }
 
-    protected processUserUpdate(response: AxiosResponse): Promise<UserGetDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        {
-            const _responseText = response.data;
-            let resultdefault: any = null;
-            let resultDatadefault  = _responseText;
-            resultdefault = UserGetDto.fromJS(resultDatadefault);
-            return Promise.resolve<UserGetDto>(resultdefault);
+  /**
+   * @return The updated user
+   */
+  userUpdate(
+    body: UserUpdateDto,
+    cancelToken?: CancelToken | undefined,
+  ): Promise<UserGetDto> {
+    let url_ = this.baseUrl + '/user/update';
+    url_ = url_.replace(/[?&]$/, '');
 
+    const content_ = JSON.stringify(body);
+
+    let options_: AxiosRequestConfig = {
+      data: content_,
+      method: 'PUT',
+      url: url_,
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      cancelToken,
+    };
+
+    return this.instance
+      .request(options_)
+      .catch((_error: any) => {
+        if (isAxiosError(_error) && _error.response) {
+          return _error.response;
+        } else {
+          throw _error;
         }
+      })
+      .then((_response: AxiosResponse) => {
+        return this.processUserUpdate(_response);
+      });
+  }
+
+  protected processUserUpdate(response: AxiosResponse): Promise<UserGetDto> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && typeof response.headers === 'object') {
+      for (let k in response.headers) {
+        if (response.headers.hasOwnProperty(k)) {
+          _headers[k] = response.headers[k];
+        }
+      }
     }
-
-    /**
-     * @param file (optional)
-     * @return Upload avatar image for a user
-     */
-    userUploadAvatar(file: FileParameter | undefined, cancelToken?: CancelToken | undefined): Promise<UserGetDto> {
-        let url_ = this.baseUrl + "/user/uploadAvatar";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = new FormData();
-        if (file === null || file === undefined)
-            throw new Error("The parameter 'file' cannot be null.");
-        else
-            content_.append("file", file.data, file.fileName ? file.fileName : "file");
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "POST",
-            url: url_,
-            headers: {
-                "Accept": "application/json"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processUserUploadAvatar(_response);
-        });
+    {
+      const _responseText = response.data;
+      let resultdefault: any = null;
+      let resultDatadefault = _responseText;
+      resultdefault = UserGetDto.fromJS(resultDatadefault);
+      return Promise.resolve<UserGetDto>(resultdefault);
     }
+  }
 
-    protected processUserUploadAvatar(response: AxiosResponse): Promise<UserGetDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        {
-            const _responseText = response.data;
-            let resultdefault: any = null;
-            let resultDatadefault  = _responseText;
-            resultdefault = UserGetDto.fromJS(resultDatadefault);
-            return Promise.resolve<UserGetDto>(resultdefault);
+  /**
+   * @param file (optional)
+   * @return Upload avatar image for a user
+   */
+  userUploadAvatar(
+    file: FileParameter | undefined,
+    cancelToken?: CancelToken | undefined,
+  ): Promise<UserGetDto> {
+    let url_ = this.baseUrl + '/user/uploadAvatar';
+    url_ = url_.replace(/[?&]$/, '');
 
+    const content_ = new FormData();
+    if (file === null || file === undefined)
+      throw new Error("The parameter 'file' cannot be null.");
+    else
+      content_.append(
+        'file',
+        file.data,
+        file.fileName ? file.fileName : 'file',
+      );
+
+    let options_: AxiosRequestConfig = {
+      data: content_,
+      method: 'POST',
+      url: url_,
+      headers: {
+        Accept: 'application/json',
+      },
+      cancelToken,
+    };
+
+    return this.instance
+      .request(options_)
+      .catch((_error: any) => {
+        if (isAxiosError(_error) && _error.response) {
+          return _error.response;
+        } else {
+          throw _error;
         }
+      })
+      .then((_response: AxiosResponse) => {
+        return this.processUserUploadAvatar(_response);
+      });
+  }
+
+  protected processUserUploadAvatar(
+    response: AxiosResponse,
+  ): Promise<UserGetDto> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && typeof response.headers === 'object') {
+      for (let k in response.headers) {
+        if (response.headers.hasOwnProperty(k)) {
+          _headers[k] = response.headers[k];
+        }
+      }
     }
-
-    authTest( cancelToken?: CancelToken | undefined): Promise<any> {
-        let url_ = this.baseUrl + "/auth/test";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "application/json"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processAuthTest(_response);
-        });
+    {
+      const _responseText = response.data;
+      let resultdefault: any = null;
+      let resultDatadefault = _responseText;
+      resultdefault = UserGetDto.fromJS(resultDatadefault);
+      return Promise.resolve<UserGetDto>(resultdefault);
     }
+  }
 
-    protected processAuthTest(response: AxiosResponse): Promise<any> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
+  authTest(cancelToken?: CancelToken | undefined): Promise<any> {
+    let url_ = this.baseUrl + '/auth/test';
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: AxiosRequestConfig = {
+      method: 'GET',
+      url: url_,
+      headers: {
+        Accept: 'application/json',
+      },
+      cancelToken,
+    };
+
+    return this.instance
+      .request(options_)
+      .catch((_error: any) => {
+        if (isAxiosError(_error) && _error.response) {
+          return _error.response;
+        } else {
+          throw _error;
         }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200  = _responseText;
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+      })
+      .then((_response: AxiosResponse) => {
+        return this.processAuthTest(_response);
+      });
+  }
 
-            return Promise.resolve<any>(result200);
-
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+  protected processAuthTest(response: AxiosResponse): Promise<any> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && typeof response.headers === 'object') {
+      for (let k in response.headers) {
+        if (response.headers.hasOwnProperty(k)) {
+          _headers[k] = response.headers[k];
         }
-        return Promise.resolve<any>(null as any);
+      }
     }
+    if (status === 200) {
+      const _responseText = response.data;
+      let result200: any = null;
+      let resultData200 = _responseText;
+      result200 = resultData200 !== undefined ? resultData200 : <any>null;
 
-    authSignUp(body: RegisterDto, cancelToken?: CancelToken | undefined): Promise<UserGetDto> {
-        let url_ = this.baseUrl + "/auth/signUp";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "POST",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processAuthSignUp(_response);
-        });
+      return Promise.resolve<any>(result200);
+    } else if (status !== 200 && status !== 204) {
+      const _responseText = response.data;
+      return throwException(
+        'An unexpected server error occurred.',
+        status,
+        _responseText,
+        _headers,
+      );
     }
+    return Promise.resolve<any>(null as any);
+  }
 
-    protected processAuthSignUp(response: AxiosResponse): Promise<UserGetDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        if (status === 201) {
-            const _responseText = response.data;
-            let result201: any = null;
-            let resultData201  = _responseText;
-            result201 = UserGetDto.fromJS(resultData201);
-            return Promise.resolve<UserGetDto>(result201);
+  authSignUp(
+    body: RegisterDto,
+    cancelToken?: CancelToken | undefined,
+  ): Promise<UserGetDto> {
+    let url_ = this.baseUrl + '/auth/signUp';
+    url_ = url_.replace(/[?&]$/, '');
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+    const content_ = JSON.stringify(body);
+
+    let options_: AxiosRequestConfig = {
+      data: content_,
+      method: 'POST',
+      url: url_,
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      cancelToken,
+    };
+
+    return this.instance
+      .request(options_)
+      .catch((_error: any) => {
+        if (isAxiosError(_error) && _error.response) {
+          return _error.response;
+        } else {
+          throw _error;
         }
-        return Promise.resolve<UserGetDto>(null as any);
+      })
+      .then((_response: AxiosResponse) => {
+        return this.processAuthSignUp(_response);
+      });
+  }
+
+  protected processAuthSignUp(response: AxiosResponse): Promise<UserGetDto> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && typeof response.headers === 'object') {
+      for (let k in response.headers) {
+        if (response.headers.hasOwnProperty(k)) {
+          _headers[k] = response.headers[k];
+        }
+      }
     }
-
-    authSignIn(body: LoginDto, cancelToken?: CancelToken | undefined): Promise<AccessTokenDto> {
-        let url_ = this.baseUrl + "/auth/signIn";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "POST",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processAuthSignIn(_response);
-        });
+    if (status === 201) {
+      const _responseText = response.data;
+      let result201: any = null;
+      let resultData201 = _responseText;
+      result201 = UserGetDto.fromJS(resultData201);
+      return Promise.resolve<UserGetDto>(result201);
+    } else if (status !== 200 && status !== 204) {
+      const _responseText = response.data;
+      return throwException(
+        'An unexpected server error occurred.',
+        status,
+        _responseText,
+        _headers,
+      );
     }
+    return Promise.resolve<UserGetDto>(null as any);
+  }
 
-    protected processAuthSignIn(response: AxiosResponse): Promise<AccessTokenDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200  = _responseText;
-            result200 = AccessTokenDto.fromJS(resultData200);
-            return Promise.resolve<AccessTokenDto>(result200);
+  authSignIn(
+    body: LoginDto,
+    cancelToken?: CancelToken | undefined,
+  ): Promise<AccessTokenDto> {
+    let url_ = this.baseUrl + '/auth/signIn';
+    url_ = url_.replace(/[?&]$/, '');
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+    const content_ = JSON.stringify(body);
+
+    let options_: AxiosRequestConfig = {
+      data: content_,
+      method: 'POST',
+      url: url_,
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      cancelToken,
+    };
+
+    return this.instance
+      .request(options_)
+      .catch((_error: any) => {
+        if (isAxiosError(_error) && _error.response) {
+          return _error.response;
+        } else {
+          throw _error;
         }
-        return Promise.resolve<AccessTokenDto>(null as any);
+      })
+      .then((_response: AxiosResponse) => {
+        return this.processAuthSignIn(_response);
+      });
+  }
+
+  protected processAuthSignIn(
+    response: AxiosResponse,
+  ): Promise<AccessTokenDto> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && typeof response.headers === 'object') {
+      for (let k in response.headers) {
+        if (response.headers.hasOwnProperty(k)) {
+          _headers[k] = response.headers[k];
+        }
+      }
     }
-
-    authForgotPwd(body: StringEmailDto, cancelToken?: CancelToken | undefined): Promise<void> {
-        let url_ = this.baseUrl + "/auth/forgotPwd";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "POST",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processAuthForgotPwd(_response);
-        });
+    if (status === 200) {
+      const _responseText = response.data;
+      let result200: any = null;
+      let resultData200 = _responseText;
+      result200 = AccessTokenDto.fromJS(resultData200);
+      return Promise.resolve<AccessTokenDto>(result200);
+    } else if (status !== 200 && status !== 204) {
+      const _responseText = response.data;
+      return throwException(
+        'An unexpected server error occurred.',
+        status,
+        _responseText,
+        _headers,
+      );
     }
+    return Promise.resolve<AccessTokenDto>(null as any);
+  }
 
-    protected processAuthForgotPwd(response: AxiosResponse): Promise<void> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            return Promise.resolve<void>(null as any);
+  authForgotPwd(
+    body: StringEmailDto,
+    cancelToken?: CancelToken | undefined,
+  ): Promise<void> {
+    let url_ = this.baseUrl + '/auth/forgotPwd';
+    url_ = url_.replace(/[?&]$/, '');
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+    const content_ = JSON.stringify(body);
+
+    let options_: AxiosRequestConfig = {
+      data: content_,
+      method: 'POST',
+      url: url_,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      cancelToken,
+    };
+
+    return this.instance
+      .request(options_)
+      .catch((_error: any) => {
+        if (isAxiosError(_error) && _error.response) {
+          return _error.response;
+        } else {
+          throw _error;
         }
-        return Promise.resolve<void>(null as any);
+      })
+      .then((_response: AxiosResponse) => {
+        return this.processAuthForgotPwd(_response);
+      });
+  }
+
+  protected processAuthForgotPwd(response: AxiosResponse): Promise<void> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && typeof response.headers === 'object') {
+      for (let k in response.headers) {
+        if (response.headers.hasOwnProperty(k)) {
+          _headers[k] = response.headers[k];
+        }
+      }
     }
-
-    authResetPwd(body: ResetPwdDto, cancelToken?: CancelToken | undefined): Promise<void> {
-        let url_ = this.baseUrl + "/auth/resetPwd";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "POST",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processAuthResetPwd(_response);
-        });
+    if (status === 200) {
+      const _responseText = response.data;
+      return Promise.resolve<void>(null as any);
+    } else if (status !== 200 && status !== 204) {
+      const _responseText = response.data;
+      return throwException(
+        'An unexpected server error occurred.',
+        status,
+        _responseText,
+        _headers,
+      );
     }
+    return Promise.resolve<void>(null as any);
+  }
 
-    protected processAuthResetPwd(response: AxiosResponse): Promise<void> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            return Promise.resolve<void>(null as any);
+  authResetPwd(
+    body: ResetPwdDto,
+    cancelToken?: CancelToken | undefined,
+  ): Promise<void> {
+    let url_ = this.baseUrl + '/auth/resetPwd';
+    url_ = url_.replace(/[?&]$/, '');
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+    const content_ = JSON.stringify(body);
+
+    let options_: AxiosRequestConfig = {
+      data: content_,
+      method: 'POST',
+      url: url_,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      cancelToken,
+    };
+
+    return this.instance
+      .request(options_)
+      .catch((_error: any) => {
+        if (isAxiosError(_error) && _error.response) {
+          return _error.response;
+        } else {
+          throw _error;
         }
-        return Promise.resolve<void>(null as any);
+      })
+      .then((_response: AxiosResponse) => {
+        return this.processAuthResetPwd(_response);
+      });
+  }
+
+  protected processAuthResetPwd(response: AxiosResponse): Promise<void> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && typeof response.headers === 'object') {
+      for (let k in response.headers) {
+        if (response.headers.hasOwnProperty(k)) {
+          _headers[k] = response.headers[k];
+        }
+      }
     }
-
-    /**
-     * @return A list of festival
-     */
-    festivalGetMany(body: FestivalGetAnyDto, cancelToken?: CancelToken | undefined): Promise<FestivalGetDto[]> {
-        let url_ = this.baseUrl + "/festival/getMany";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "POST",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processFestivalGetMany(_response);
-        });
+    if (status === 200) {
+      const _responseText = response.data;
+      return Promise.resolve<void>(null as any);
+    } else if (status !== 200 && status !== 204) {
+      const _responseText = response.data;
+      return throwException(
+        'An unexpected server error occurred.',
+        status,
+        _responseText,
+        _headers,
+      );
     }
+    return Promise.resolve<void>(null as any);
+  }
 
-    protected processFestivalGetMany(response: AxiosResponse): Promise<FestivalGetDto[]> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        {
-            const _responseText = response.data;
-            let resultdefault: any = null;
-            let resultDatadefault  = _responseText;
-            if (Array.isArray(resultDatadefault)) {
-                resultdefault = [] as any;
-                for (let item of resultDatadefault)
-                    resultdefault!.push(FestivalGetDto.fromJS(item));
-            }
-            else {
-                resultdefault = <any>null;
-            }
-            return Promise.resolve<FestivalGetDto[]>(resultdefault);
+  /**
+   * @return A list of festival
+   */
+  festivalGetMany(
+    body: FestivalGetAnyDto,
+    cancelToken?: CancelToken | undefined,
+  ): Promise<FestivalGetDto[]> {
+    let url_ = this.baseUrl + '/festival/getMany';
+    url_ = url_.replace(/[?&]$/, '');
 
+    const content_ = JSON.stringify(body);
+
+    let options_: AxiosRequestConfig = {
+      data: content_,
+      method: 'POST',
+      url: url_,
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      cancelToken,
+    };
+
+    return this.instance
+      .request(options_)
+      .catch((_error: any) => {
+        if (isAxiosError(_error) && _error.response) {
+          return _error.response;
+        } else {
+          throw _error;
         }
+      })
+      .then((_response: AxiosResponse) => {
+        return this.processFestivalGetMany(_response);
+      });
+  }
+
+  protected processFestivalGetMany(
+    response: AxiosResponse,
+  ): Promise<FestivalGetDto[]> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && typeof response.headers === 'object') {
+      for (let k in response.headers) {
+        if (response.headers.hasOwnProperty(k)) {
+          _headers[k] = response.headers[k];
+        }
+      }
     }
-
-    /**
-     * @return The festival with specified id
-     */
-    festivalById(id: number, cancelToken?: CancelToken | undefined): Promise<FestivalGetDto> {
-        let url_ = this.baseUrl + "/festival/byId/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "application/json"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processFestivalById(_response);
-        });
+    {
+      const _responseText = response.data;
+      let resultdefault: any = null;
+      let resultDatadefault = _responseText;
+      if (Array.isArray(resultDatadefault)) {
+        resultdefault = [] as any;
+        for (let item of resultDatadefault)
+          resultdefault!.push(FestivalGetDto.fromJS(item));
+      } else {
+        resultdefault = <any>null;
+      }
+      return Promise.resolve<FestivalGetDto[]>(resultdefault);
     }
+  }
 
-    protected processFestivalById(response: AxiosResponse): Promise<FestivalGetDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        {
-            const _responseText = response.data;
-            let resultdefault: any = null;
-            let resultDatadefault  = _responseText;
-            resultdefault = FestivalGetDto.fromJS(resultDatadefault);
-            return Promise.resolve<FestivalGetDto>(resultdefault);
+  /**
+   * @return The festival with specified id
+   */
+  festivalById(
+    id: number,
+    cancelToken?: CancelToken | undefined,
+  ): Promise<FestivalGetDto> {
+    let url_ = this.baseUrl + '/festival/byId/{id}';
+    if (id === undefined || id === null)
+      throw new Error("The parameter 'id' must be defined.");
+    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+    url_ = url_.replace(/[?&]$/, '');
 
+    let options_: AxiosRequestConfig = {
+      method: 'GET',
+      url: url_,
+      headers: {
+        Accept: 'application/json',
+      },
+      cancelToken,
+    };
+
+    return this.instance
+      .request(options_)
+      .catch((_error: any) => {
+        if (isAxiosError(_error) && _error.response) {
+          return _error.response;
+        } else {
+          throw _error;
         }
+      })
+      .then((_response: AxiosResponse) => {
+        return this.processFestivalById(_response);
+      });
+  }
+
+  protected processFestivalById(
+    response: AxiosResponse,
+  ): Promise<FestivalGetDto> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && typeof response.headers === 'object') {
+      for (let k in response.headers) {
+        if (response.headers.hasOwnProperty(k)) {
+          _headers[k] = response.headers[k];
+        }
+      }
     }
-
-    /**
-     * @return The created festival
-     */
-    festivalCreate(body: FestivalCreateDto, cancelToken?: CancelToken | undefined): Promise<FestivalGetDto[]> {
-        let url_ = this.baseUrl + "/festival/create";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "POST",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processFestivalCreate(_response);
-        });
+    {
+      const _responseText = response.data;
+      let resultdefault: any = null;
+      let resultDatadefault = _responseText;
+      resultdefault = FestivalGetDto.fromJS(resultDatadefault);
+      return Promise.resolve<FestivalGetDto>(resultdefault);
     }
+  }
 
-    protected processFestivalCreate(response: AxiosResponse): Promise<FestivalGetDto[]> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        {
-            const _responseText = response.data;
-            let resultdefault: any = null;
-            let resultDatadefault  = _responseText;
-            if (Array.isArray(resultDatadefault)) {
-                resultdefault = [] as any;
-                for (let item of resultDatadefault)
-                    resultdefault!.push(FestivalGetDto.fromJS(item));
-            }
-            else {
-                resultdefault = <any>null;
-            }
-            return Promise.resolve<FestivalGetDto[]>(resultdefault);
+  /**
+   * @return The created festival
+   */
+  festivalCreate(
+    body: FestivalCreateDto,
+    cancelToken?: CancelToken | undefined,
+  ): Promise<FestivalGetDto[]> {
+    let url_ = this.baseUrl + '/festival/create';
+    url_ = url_.replace(/[?&]$/, '');
 
+    const content_ = JSON.stringify(body);
+
+    let options_: AxiosRequestConfig = {
+      data: content_,
+      method: 'POST',
+      url: url_,
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      cancelToken,
+    };
+
+    return this.instance
+      .request(options_)
+      .catch((_error: any) => {
+        if (isAxiosError(_error) && _error.response) {
+          return _error.response;
+        } else {
+          throw _error;
         }
+      })
+      .then((_response: AxiosResponse) => {
+        return this.processFestivalCreate(_response);
+      });
+  }
+
+  protected processFestivalCreate(
+    response: AxiosResponse,
+  ): Promise<FestivalGetDto[]> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && typeof response.headers === 'object') {
+      for (let k in response.headers) {
+        if (response.headers.hasOwnProperty(k)) {
+          _headers[k] = response.headers[k];
+        }
+      }
     }
+    {
+      const _responseText = response.data;
+      let resultdefault: any = null;
+      let resultDatadefault = _responseText;
+      if (Array.isArray(resultDatadefault)) {
+        resultdefault = [] as any;
+        for (let item of resultDatadefault)
+          resultdefault!.push(FestivalGetDto.fromJS(item));
+      } else {
+        resultdefault = <any>null;
+      }
+      return Promise.resolve<FestivalGetDto[]>(resultdefault);
+    }
+  }
 }
 
 export class UserGetDto implements IUserGetDto {
-    id!: number;
-    email!: string;
-    firstname?: string | undefined;
-    lastname?: string | undefined;
-    avatarUrl?: string | undefined;
+  id!: number;
+  email!: string;
+  firstname?: string | undefined;
+  lastname?: string | undefined;
+  avatarUrl?: string | undefined;
 
-    [key: string]: any;
+  [key: string]: any;
 
-    constructor(data?: IUserGetDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
+  constructor(data?: IUserGetDto) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
     }
+  }
 
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.id = _data["id"];
-            this.email = _data["email"];
-            this.firstname = _data["firstname"];
-            this.lastname = _data["lastname"];
-            this.avatarUrl = _data["avatarUrl"];
-        }
+  init(_data?: any) {
+    if (_data) {
+      for (var property in _data) {
+        if (_data.hasOwnProperty(property)) this[property] = _data[property];
+      }
+      this.id = _data['id'];
+      this.email = _data['email'];
+      this.firstname = _data['firstname'];
+      this.lastname = _data['lastname'];
+      this.avatarUrl = _data['avatarUrl'];
     }
+  }
 
-    static fromJS(data: any): UserGetDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new UserGetDto();
-        result.init(data);
-        return result;
-    }
+  static fromJS(data: any): UserGetDto {
+    data = typeof data === 'object' ? data : {};
+    let result = new UserGetDto();
+    result.init(data);
+    return result;
+  }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["id"] = this.id;
-        data["email"] = this.email;
-        data["firstname"] = this.firstname;
-        data["lastname"] = this.lastname;
-        data["avatarUrl"] = this.avatarUrl;
-        return data;
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    for (var property in this) {
+      if (this.hasOwnProperty(property)) data[property] = this[property];
     }
+    data['id'] = this.id;
+    data['email'] = this.email;
+    data['firstname'] = this.firstname;
+    data['lastname'] = this.lastname;
+    data['avatarUrl'] = this.avatarUrl;
+    return data;
+  }
 }
 
 export interface IUserGetDto {
-    id: number;
-    email: string;
-    firstname?: string | undefined;
-    lastname?: string | undefined;
-    avatarUrl?: string | undefined;
+  id: number;
+  email: string;
+  firstname?: string | undefined;
+  lastname?: string | undefined;
+  avatarUrl?: string | undefined;
 
-    [key: string]: any;
+  [key: string]: any;
 }
 
 export class StringEmailDto implements IStringEmailDto {
-    email!: string;
+  email!: string;
 
-    [key: string]: any;
+  [key: string]: any;
 
-    constructor(data?: IStringEmailDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
+  constructor(data?: IStringEmailDto) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
     }
+  }
 
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.email = _data["email"];
-        }
+  init(_data?: any) {
+    if (_data) {
+      for (var property in _data) {
+        if (_data.hasOwnProperty(property)) this[property] = _data[property];
+      }
+      this.email = _data['email'];
     }
+  }
 
-    static fromJS(data: any): StringEmailDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new StringEmailDto();
-        result.init(data);
-        return result;
-    }
+  static fromJS(data: any): StringEmailDto {
+    data = typeof data === 'object' ? data : {};
+    let result = new StringEmailDto();
+    result.init(data);
+    return result;
+  }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["email"] = this.email;
-        return data;
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    for (var property in this) {
+      if (this.hasOwnProperty(property)) data[property] = this[property];
     }
+    data['email'] = this.email;
+    return data;
+  }
 }
 
 export interface IStringEmailDto {
-    email: string;
+  email: string;
 
-    [key: string]: any;
+  [key: string]: any;
 }
 
 export class UserUpdateDto implements IUserUpdateDto {
-    id!: number;
-    email!: string;
-    firstname?: string;
-    lastname?: string;
+  id!: number;
+  email!: string;
+  firstname?: string;
+  lastname?: string;
 
-    [key: string]: any;
+  [key: string]: any;
 
-    constructor(data?: IUserUpdateDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
+  constructor(data?: IUserUpdateDto) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
     }
+  }
 
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.id = _data["id"];
-            this.email = _data["email"];
-            this.firstname = _data["firstname"];
-            this.lastname = _data["lastname"];
-        }
+  init(_data?: any) {
+    if (_data) {
+      for (var property in _data) {
+        if (_data.hasOwnProperty(property)) this[property] = _data[property];
+      }
+      this.id = _data['id'];
+      this.email = _data['email'];
+      this.firstname = _data['firstname'];
+      this.lastname = _data['lastname'];
     }
+  }
 
-    static fromJS(data: any): UserUpdateDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new UserUpdateDto();
-        result.init(data);
-        return result;
-    }
+  static fromJS(data: any): UserUpdateDto {
+    data = typeof data === 'object' ? data : {};
+    let result = new UserUpdateDto();
+    result.init(data);
+    return result;
+  }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["id"] = this.id;
-        data["email"] = this.email;
-        data["firstname"] = this.firstname;
-        data["lastname"] = this.lastname;
-        return data;
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    for (var property in this) {
+      if (this.hasOwnProperty(property)) data[property] = this[property];
     }
+    data['id'] = this.id;
+    data['email'] = this.email;
+    data['firstname'] = this.firstname;
+    data['lastname'] = this.lastname;
+    return data;
+  }
 }
 
 export interface IUserUpdateDto {
-    id: number;
-    email: string;
-    firstname?: string;
-    lastname?: string;
+  id: number;
+  email: string;
+  firstname?: string;
+  lastname?: string;
 
-    [key: string]: any;
+  [key: string]: any;
 }
 
 export class RegisterDto implements IRegisterDto {
-    email!: string;
-    password!: string;
+  email!: string;
+  password!: string;
 
-    [key: string]: any;
+  [key: string]: any;
 
-    constructor(data?: IRegisterDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
+  constructor(data?: IRegisterDto) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
     }
+  }
 
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.email = _data["email"];
-            this.password = _data["password"];
-        }
+  init(_data?: any) {
+    if (_data) {
+      for (var property in _data) {
+        if (_data.hasOwnProperty(property)) this[property] = _data[property];
+      }
+      this.email = _data['email'];
+      this.password = _data['password'];
     }
+  }
 
-    static fromJS(data: any): RegisterDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new RegisterDto();
-        result.init(data);
-        return result;
-    }
+  static fromJS(data: any): RegisterDto {
+    data = typeof data === 'object' ? data : {};
+    let result = new RegisterDto();
+    result.init(data);
+    return result;
+  }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["email"] = this.email;
-        data["password"] = this.password;
-        return data;
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    for (var property in this) {
+      if (this.hasOwnProperty(property)) data[property] = this[property];
     }
+    data['email'] = this.email;
+    data['password'] = this.password;
+    return data;
+  }
 }
 
 export interface IRegisterDto {
-    email: string;
-    password: string;
+  email: string;
+  password: string;
 
-    [key: string]: any;
+  [key: string]: any;
 }
 
 export class LoginDto implements ILoginDto {
-    email!: string;
-    password!: string;
+  email!: string;
+  password!: string;
 
-    [key: string]: any;
+  [key: string]: any;
 
-    constructor(data?: ILoginDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
+  constructor(data?: ILoginDto) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
     }
+  }
 
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.email = _data["email"];
-            this.password = _data["password"];
-        }
+  init(_data?: any) {
+    if (_data) {
+      for (var property in _data) {
+        if (_data.hasOwnProperty(property)) this[property] = _data[property];
+      }
+      this.email = _data['email'];
+      this.password = _data['password'];
     }
+  }
 
-    static fromJS(data: any): LoginDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new LoginDto();
-        result.init(data);
-        return result;
-    }
+  static fromJS(data: any): LoginDto {
+    data = typeof data === 'object' ? data : {};
+    let result = new LoginDto();
+    result.init(data);
+    return result;
+  }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["email"] = this.email;
-        data["password"] = this.password;
-        return data;
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    for (var property in this) {
+      if (this.hasOwnProperty(property)) data[property] = this[property];
     }
+    data['email'] = this.email;
+    data['password'] = this.password;
+    return data;
+  }
 }
 
 export interface ILoginDto {
-    email: string;
-    password: string;
+  email: string;
+  password: string;
 
-    [key: string]: any;
+  [key: string]: any;
 }
 
 export class AccessTokenDto implements IAccessTokenDto {
-    accessToken!: string;
+  accessToken!: string;
 
-    [key: string]: any;
+  [key: string]: any;
 
-    constructor(data?: IAccessTokenDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
+  constructor(data?: IAccessTokenDto) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
     }
+  }
 
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.accessToken = _data["accessToken"];
-        }
+  init(_data?: any) {
+    if (_data) {
+      for (var property in _data) {
+        if (_data.hasOwnProperty(property)) this[property] = _data[property];
+      }
+      this.accessToken = _data['accessToken'];
     }
+  }
 
-    static fromJS(data: any): AccessTokenDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new AccessTokenDto();
-        result.init(data);
-        return result;
-    }
+  static fromJS(data: any): AccessTokenDto {
+    data = typeof data === 'object' ? data : {};
+    let result = new AccessTokenDto();
+    result.init(data);
+    return result;
+  }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["accessToken"] = this.accessToken;
-        return data;
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    for (var property in this) {
+      if (this.hasOwnProperty(property)) data[property] = this[property];
     }
+    data['accessToken'] = this.accessToken;
+    return data;
+  }
 }
 
 export interface IAccessTokenDto {
-    accessToken: string;
+  accessToken: string;
 
-    [key: string]: any;
+  [key: string]: any;
 }
 
 export class ResetPwdDto implements IResetPwdDto {
-    password!: string;
-    token!: string;
+  password!: string;
+  token!: string;
 
-    [key: string]: any;
+  [key: string]: any;
 
-    constructor(data?: IResetPwdDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
+  constructor(data?: IResetPwdDto) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
     }
+  }
 
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.password = _data["password"];
-            this.token = _data["token"];
-        }
+  init(_data?: any) {
+    if (_data) {
+      for (var property in _data) {
+        if (_data.hasOwnProperty(property)) this[property] = _data[property];
+      }
+      this.password = _data['password'];
+      this.token = _data['token'];
     }
+  }
 
-    static fromJS(data: any): ResetPwdDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new ResetPwdDto();
-        result.init(data);
-        return result;
-    }
+  static fromJS(data: any): ResetPwdDto {
+    data = typeof data === 'object' ? data : {};
+    let result = new ResetPwdDto();
+    result.init(data);
+    return result;
+  }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["password"] = this.password;
-        data["token"] = this.token;
-        return data;
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    for (var property in this) {
+      if (this.hasOwnProperty(property)) data[property] = this[property];
     }
+    data['password'] = this.password;
+    data['token'] = this.token;
+    return data;
+  }
 }
 
 export interface IResetPwdDto {
-    password: string;
-    token: string;
+  password: string;
+  token: string;
 
-    [key: string]: any;
+  [key: string]: any;
 }
 
 export class FestivalGetAnyDto implements IFestivalGetAnyDto {
-    limit?: number;
-    offset?: number;
-    categoryId?: number;
-    region?: string;
+  limit?: number;
+  offset?: number;
+  categoryId?: number;
+  region?: string;
 
-    [key: string]: any;
+  [key: string]: any;
 
-    constructor(data?: IFestivalGetAnyDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
+  constructor(data?: IFestivalGetAnyDto) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
     }
+  }
 
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.limit = _data["limit"];
-            this.offset = _data["offset"];
-            this.categoryId = _data["categoryId"];
-            this.region = _data["region"];
-        }
+  init(_data?: any) {
+    if (_data) {
+      for (var property in _data) {
+        if (_data.hasOwnProperty(property)) this[property] = _data[property];
+      }
+      this.limit = _data['limit'];
+      this.offset = _data['offset'];
+      this.categoryId = _data['categoryId'];
+      this.region = _data['region'];
     }
+  }
 
-    static fromJS(data: any): FestivalGetAnyDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new FestivalGetAnyDto();
-        result.init(data);
-        return result;
-    }
+  static fromJS(data: any): FestivalGetAnyDto {
+    data = typeof data === 'object' ? data : {};
+    let result = new FestivalGetAnyDto();
+    result.init(data);
+    return result;
+  }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["limit"] = this.limit;
-        data["offset"] = this.offset;
-        data["categoryId"] = this.categoryId;
-        data["region"] = this.region;
-        return data;
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    for (var property in this) {
+      if (this.hasOwnProperty(property)) data[property] = this[property];
     }
+    data['limit'] = this.limit;
+    data['offset'] = this.offset;
+    data['categoryId'] = this.categoryId;
+    data['region'] = this.region;
+    return data;
+  }
 }
 
 export interface IFestivalGetAnyDto {
-    limit?: number;
-    offset?: number;
-    categoryId?: number;
-    region?: string;
+  limit?: number;
+  offset?: number;
+  categoryId?: number;
+  region?: string;
 
-    [key: string]: any;
+  [key: string]: any;
 }
 
 export class FestivalGetDto implements IFestivalGetDto {
-    id!: number;
-    idCategory!: number;
-    idSubCategory!: number;
-    region!: string;
-    department!: string;
-    zipcode!: number;
-    adress!: string;
-    website?: string | undefined;
-    email!: string;
-    creationDate?: string | undefined;
-    geoPosX?: number | undefined;
-    geoPosY?: number | undefined;
-    externalId?: string | undefined;
+  id!: number;
+  idCategory!: number;
+  idSubCategory!: number;
+  region!: string;
+  department!: string;
+  zipcode!: number;
+  adress!: string;
+  website?: string | undefined;
+  email!: string;
+  creationDate?: string | undefined;
+  geoPosX?: number | undefined;
+  geoPosY?: number | undefined;
+  externalId?: string | undefined;
 
-    [key: string]: any;
+  [key: string]: any;
 
-    constructor(data?: IFestivalGetDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
+  constructor(data?: IFestivalGetDto) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
     }
+  }
 
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.id = _data["id"];
-            this.idCategory = _data["idCategory"];
-            this.idSubCategory = _data["idSubCategory"];
-            this.region = _data["region"];
-            this.department = _data["department"];
-            this.zipcode = _data["zipcode"];
-            this.adress = _data["adress"];
-            this.website = _data["website"];
-            this.email = _data["email"];
-            this.creationDate = _data["creationDate"];
-            this.geoPosX = _data["geoPosX"];
-            this.geoPosY = _data["geoPosY"];
-            this.externalId = _data["externalId"];
-        }
+  init(_data?: any) {
+    if (_data) {
+      for (var property in _data) {
+        if (_data.hasOwnProperty(property)) this[property] = _data[property];
+      }
+      this.id = _data['id'];
+      this.idCategory = _data['idCategory'];
+      this.idSubCategory = _data['idSubCategory'];
+      this.region = _data['region'];
+      this.department = _data['department'];
+      this.zipcode = _data['zipcode'];
+      this.adress = _data['adress'];
+      this.website = _data['website'];
+      this.email = _data['email'];
+      this.creationDate = _data['creationDate'];
+      this.geoPosX = _data['geoPosX'];
+      this.geoPosY = _data['geoPosY'];
+      this.externalId = _data['externalId'];
     }
+  }
 
-    static fromJS(data: any): FestivalGetDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new FestivalGetDto();
-        result.init(data);
-        return result;
-    }
+  static fromJS(data: any): FestivalGetDto {
+    data = typeof data === 'object' ? data : {};
+    let result = new FestivalGetDto();
+    result.init(data);
+    return result;
+  }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["id"] = this.id;
-        data["idCategory"] = this.idCategory;
-        data["idSubCategory"] = this.idSubCategory;
-        data["region"] = this.region;
-        data["department"] = this.department;
-        data["zipcode"] = this.zipcode;
-        data["adress"] = this.adress;
-        data["website"] = this.website;
-        data["email"] = this.email;
-        data["creationDate"] = this.creationDate;
-        data["geoPosX"] = this.geoPosX;
-        data["geoPosY"] = this.geoPosY;
-        data["externalId"] = this.externalId;
-        return data;
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    for (var property in this) {
+      if (this.hasOwnProperty(property)) data[property] = this[property];
     }
+    data['id'] = this.id;
+    data['idCategory'] = this.idCategory;
+    data['idSubCategory'] = this.idSubCategory;
+    data['region'] = this.region;
+    data['department'] = this.department;
+    data['zipcode'] = this.zipcode;
+    data['adress'] = this.adress;
+    data['website'] = this.website;
+    data['email'] = this.email;
+    data['creationDate'] = this.creationDate;
+    data['geoPosX'] = this.geoPosX;
+    data['geoPosY'] = this.geoPosY;
+    data['externalId'] = this.externalId;
+    return data;
+  }
 }
 
 export interface IFestivalGetDto {
-    id: number;
-    idCategory: number;
-    idSubCategory: number;
-    region: string;
-    department: string;
-    zipcode: number;
-    adress: string;
-    website?: string | undefined;
-    email: string;
-    creationDate?: string | undefined;
-    geoPosX?: number | undefined;
-    geoPosY?: number | undefined;
-    externalId?: string | undefined;
+  id: number;
+  idCategory: number;
+  idSubCategory: number;
+  region: string;
+  department: string;
+  zipcode: number;
+  adress: string;
+  website?: string | undefined;
+  email: string;
+  creationDate?: string | undefined;
+  geoPosX?: number | undefined;
+  geoPosY?: number | undefined;
+  externalId?: string | undefined;
 
-    [key: string]: any;
+  [key: string]: any;
 }
 
 export class FestivalCreateDto implements IFestivalCreateDto {
-    idCategory!: number;
-    idSubCategory!: number;
-    region!: string;
-    department!: string;
-    zipcode!: number;
-    adress!: string;
-    website?: string | undefined;
-    email!: string;
-    creationDate?: string | undefined;
-    geoPosX?: number | undefined;
-    geoPosY?: number | undefined;
+  idCategory!: number;
+  idSubCategory!: number;
+  region!: string;
+  department!: string;
+  zipcode!: number;
+  adress!: string;
+  website?: string | undefined;
+  email!: string;
+  creationDate?: string | undefined;
+  geoPosX?: number | undefined;
+  geoPosY?: number | undefined;
 
-    [key: string]: any;
+  [key: string]: any;
 
-    constructor(data?: IFestivalCreateDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
+  constructor(data?: IFestivalCreateDto) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
     }
+  }
 
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.idCategory = _data["idCategory"];
-            this.idSubCategory = _data["idSubCategory"];
-            this.region = _data["region"];
-            this.department = _data["department"];
-            this.zipcode = _data["zipcode"];
-            this.adress = _data["adress"];
-            this.website = _data["website"];
-            this.email = _data["email"];
-            this.creationDate = _data["creationDate"];
-            this.geoPosX = _data["geoPosX"];
-            this.geoPosY = _data["geoPosY"];
-        }
+  init(_data?: any) {
+    if (_data) {
+      for (var property in _data) {
+        if (_data.hasOwnProperty(property)) this[property] = _data[property];
+      }
+      this.idCategory = _data['idCategory'];
+      this.idSubCategory = _data['idSubCategory'];
+      this.region = _data['region'];
+      this.department = _data['department'];
+      this.zipcode = _data['zipcode'];
+      this.adress = _data['adress'];
+      this.website = _data['website'];
+      this.email = _data['email'];
+      this.creationDate = _data['creationDate'];
+      this.geoPosX = _data['geoPosX'];
+      this.geoPosY = _data['geoPosY'];
     }
+  }
 
-    static fromJS(data: any): FestivalCreateDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new FestivalCreateDto();
-        result.init(data);
-        return result;
-    }
+  static fromJS(data: any): FestivalCreateDto {
+    data = typeof data === 'object' ? data : {};
+    let result = new FestivalCreateDto();
+    result.init(data);
+    return result;
+  }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["idCategory"] = this.idCategory;
-        data["idSubCategory"] = this.idSubCategory;
-        data["region"] = this.region;
-        data["department"] = this.department;
-        data["zipcode"] = this.zipcode;
-        data["adress"] = this.adress;
-        data["website"] = this.website;
-        data["email"] = this.email;
-        data["creationDate"] = this.creationDate;
-        data["geoPosX"] = this.geoPosX;
-        data["geoPosY"] = this.geoPosY;
-        return data;
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    for (var property in this) {
+      if (this.hasOwnProperty(property)) data[property] = this[property];
     }
+    data['idCategory'] = this.idCategory;
+    data['idSubCategory'] = this.idSubCategory;
+    data['region'] = this.region;
+    data['department'] = this.department;
+    data['zipcode'] = this.zipcode;
+    data['adress'] = this.adress;
+    data['website'] = this.website;
+    data['email'] = this.email;
+    data['creationDate'] = this.creationDate;
+    data['geoPosX'] = this.geoPosX;
+    data['geoPosY'] = this.geoPosY;
+    return data;
+  }
 }
 
 export interface IFestivalCreateDto {
-    idCategory: number;
-    idSubCategory: number;
-    region: string;
-    department: string;
-    zipcode: number;
-    adress: string;
-    website?: string | undefined;
-    email: string;
-    creationDate?: string | undefined;
-    geoPosX?: number | undefined;
-    geoPosY?: number | undefined;
+  idCategory: number;
+  idSubCategory: number;
+  region: string;
+  department: string;
+  zipcode: number;
+  adress: string;
+  website?: string | undefined;
+  email: string;
+  creationDate?: string | undefined;
+  geoPosX?: number | undefined;
+  geoPosY?: number | undefined;
 
-    [key: string]: any;
+  [key: string]: any;
 }
 
 export interface FileParameter {
-    data: any;
-    fileName: string;
+  data: any;
+  fileName: string;
 }
 
 export class GenerateApiServiceException extends Error {
-	message: string;
-	status: number;
-	response: string;
-	headers: { [key: string]: any };
-	result: any;
+  message: string;
+  status: number;
+  response: string;
+  headers: { [key: string]: any };
+  result: any;
 
-	constructor(
-		message: string,
-		status: number,
-		response: string | unknown,
-		headers: { [key: string]: any },
-		result: any
-	) {
-		super();
+  constructor(
+    message: string,
+    status: number,
+    response: string | unknown,
+    headers: { [key: string]: any },
+    result: any,
+  ) {
+    super();
 
-		this.message = message;
-		this.status = status;
-		this.response = typeof response == "string" ? response : "";
-		this.headers = headers;
-		this.result = result;
-	}
+    this.message = message;
+    this.status = status;
+    this.response = typeof response == 'string' ? response : '';
+    this.headers = headers;
+    this.result = result;
+  }
 
-	protected isGenerateApiServiceException = true;
+  protected isGenerateApiServiceException = true;
 
-	static isGenerateApiServiceException(
-		obj: any
-	): obj is GenerateApiServiceException {
-		return obj.isGenerateApiServiceException === true;
-	}
+  static isGenerateApiServiceException(
+    obj: any,
+  ): obj is GenerateApiServiceException {
+    return obj.isGenerateApiServiceException === true;
+  }
 }
 
 function throwException(
-	message: string,
-	status: number,
-	response: string | unknown,
-	headers: { [key: string]: any },
-	result?: any
+  message: string,
+  status: number,
+  response: string | unknown,
+  headers: { [key: string]: any },
+  result?: any,
 ): any {
-	if (result !== null && result !== undefined) throw result;
-	else
-		throw new GenerateApiServiceException(
-			message,
-			status,
-			response,
-			headers,
-			null
-		);
+  if (result !== null && result !== undefined) throw result;
+  else
+    throw new GenerateApiServiceException(
+      message,
+      status,
+      response,
+      headers,
+      null,
+    );
 }
 
 function isAxiosError(obj: any | undefined): obj is AxiosError {
-	return obj && obj.isAxiosError === true;
+  return obj && obj.isAxiosError === true;
 }
