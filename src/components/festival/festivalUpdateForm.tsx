@@ -45,6 +45,7 @@ export default function UserUpdateForm() {
         ? firstname
         : userDataLoggedIn?.firstname,
     });
+    
     const updatedUserData: UserGetDto =
       await apiService.userUpdate(updatedUser);
     setUserDataLoggedIn(updatedUserData);

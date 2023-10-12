@@ -59,10 +59,13 @@ export default function FestivalList() {
               <Typography variant="body2" color="text.secondary">
                 Lieu: {festival.adresse_postale}
               </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Organisateur : {festival.libelle_epci_collage_en_valeur}
+              </Typography>
             </CardContent>
             <CardActions>
               <Link
-                href={'./../festivalDetail/' + festival.id}
+                href={'./../festival/' + festival.id}
                 style={{ textDecoration: 'none', margin: 'auto' }}
               >
                 Details
@@ -71,7 +74,7 @@ export default function FestivalList() {
           </Card>
         );
       })}
-      ;
+      
     </>
   );
 }

@@ -1,7 +1,9 @@
 'use client';
 import FestivalDetails from '../../../mockupData.json'
 import * as React from 'react';
-import { useState } from 'react';
+
+import { useRouter } from 'next/navigation';
+// import { useState } from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -11,19 +13,23 @@ import Link from 'next/link';
 import Image, { ImageLoader } from 'next/image';
 import { useUserContext } from '@/utils/contexts/UserContext';
 import { Container, Stack } from '@mui/material';
-import { useParams } from 'next/navigation';
+// import { useParams } from 'next/navigation';
+
+
 
 export default function Festival() {
   const { userDataLoggedIn } = useUserContext();
+  const router = useRouter();
+  // const {id} = router.query
+
+  // console.log({id})
   const [festival, setFestival] = FestivalDetails.results
-  const params = useParams()
-  const FestivalDetailId = params.festivalDetailId;
-//  console.log(params)
+  
+  // const params = useParams()
+  // const FestivalDetailId = params.festivalDetailId;
   const imageLoader: ImageLoader = ({ src }) => {
     return `http://localhost:3003/${src}`;
   };
-
-  // console.log({params})
   
   return (
 
@@ -93,7 +99,7 @@ export default function Festival() {
         </CardContent>
         <CardActions>
           <Stack direction="row" spacing={2}>
-            <Link href={'/festivalDetail/update'} style={{ textDecoration: 'none' }}>
+            <Link href={'/festival/update'} style={{ textDecoration: 'none' }}>
               Modifier
             </Link>
             <Link href={'/'} style={{ textDecoration: 'none' }}>
@@ -105,3 +111,4 @@ export default function Festival() {
     </Container>
   );
 }
+
