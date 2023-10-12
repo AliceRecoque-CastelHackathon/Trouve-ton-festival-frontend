@@ -3,10 +3,11 @@
 import React, { useState } from 'react';
 import {
   ApiService,
+  FestivalCreateDto,
   UserGetDto,
   UserUpdateDto,
 } from '../../services/api.service';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import {
   TextField,
@@ -22,42 +23,74 @@ import { useUserContext } from '@/utils/contexts/UserContext';
 export default function UserUpdateForm() {
   const apiService: ApiService = new ApiService();
   const router = useRouter();
-  const [lastname, setLastname]= useState<string>("");
+  const [lastname, setLastname] = useState<string>('');
   const [FestivalName, setFestivalName] = useState<string>('');
   const [FestivalAdress, setFestivalAdress] = useState<string>('');
   const [FestivalWeb, setFestivalWeb] = useState<string>('');
   const [FestivalEmail, setFestivalEmail] = useState<string>('');
   const [FestivalCategorie, setFestivalCategorie] = useState<string>('');
   const [FestivalOrganisateur, setFestivalOrganisateur] = useState<string>('');
-  const [FestivalDate, setFestivalDate] = useState<string>('')
+  const [FestivalDate, setFestivalDate] = useState<string>('');
   const [firstname, setFirstname] = useState<string>('');
   const { userDataLoggedIn, setUserDataLoggedIn } = useUserContext();
+  const path = usePathname();
 
   async function handleSubmitForm() {
     //send Data over server
-    const updatedUser: UserUpdateDto = new UserUpdateDto({
-      id: userDataLoggedIn!.id,
-      email: userDataLoggedIn!.email,
-      lastname: !ToolBoxService.stringIsNullOrWhiteSpace(lastname)
-        ? lastname
-        : userDataLoggedIn?.lastname,
-      firstname: !ToolBoxService.stringIsNullOrWhiteSpace(firstname)
-        ? firstname
-        : userDataLoggedIn?.firstname,
-    });
-    
-    const updatedFestivalData: UserGetDto =
-      await apiService.userUpdate(updatedUser);
-    setUserDataLoggedIn(updatedFestivalData);
-    setLastname('');
-    setFirstname('');
-    setFestivalName('');
-    setFestivalAdress('');
-    setFestivalWeb('');
-    setFestivalEmail('');
-    setFestivalCategorie('');
-    setFestivalOrganisateur('');
-    setFestivalDate('');
+    if (path === '/festival/update') {
+      const updatedUser: UserUpdateDto = new UserUpdateDto({
+        id: userDataLoggedIn!.id,
+        email: userDataLoggedIn!.email,
+        lastname: !ToolBoxService.stringIsNullOrWhiteSpace(lastname)
+          ? lastname
+          : userDataLoggedIn?.lastname,
+        firstname: !ToolBoxService.stringIsNullOrWhiteSpace(firstname)
+          ? firstname
+          : userDataLoggedIn?.firstname,
+      });
+
+      const updatedFestivalData: UserGetDto =
+        await apiService.userUpdate(updatedUser);
+      setUserDataLoggedIn(updatedFestivalData);
+      setLastname('');
+      setFirstname('');
+      setFestivalName('');
+      setFestivalAdress('');
+      setFestivalWeb('');
+      setFestivalEmail('');
+      setFestivalCategorie('');
+      setFestivalOrganisateur('');
+      setFestivalDate('');
+    } else if (path === '/festival/create') { 
+      const createdFestival: FestivalCreateDto = new FestivalCreateDto({
+        setFestivalName('');
+        setFestivalAdress('');
+        setFestivalWeb('');
+        setFestivalEmail('');
+        setFestivalCategorie('');
+        setFestivalOrganisateur('');
+        setFestivalDate('');
+  setRegion('') ;
+  setDepartment('') ;
+        setZipcode("");
+  setCreationDate("");
+  setGeoPosX("");
+  setGeoPosY("");
+      });
+
+      const updatedFestivalData: UserGetDto =
+        await apiService.userUpdate(updatedUser);
+      setUserDataLoggedIn(updatedFestivalData);
+      setLastname('');
+      setFirstname('');
+      setFestivalName('');
+      setFestivalAdress('');
+      setFestivalWeb('');
+      setFestivalEmail('');
+      setFestivalCategorie('');
+      setFestivalOrganisateur('');
+      setFestivalDate('');
+    }
   }
 
   return (

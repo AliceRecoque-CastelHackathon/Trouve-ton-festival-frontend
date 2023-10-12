@@ -1,6 +1,5 @@
 'use client';
 import * as React from 'react';
-import FestivalDetails from '../../../mockupData.json'
 import { useState } from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
