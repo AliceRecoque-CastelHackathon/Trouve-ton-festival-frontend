@@ -84,7 +84,7 @@ export default function FestivalList() {
                   Nom: {festival.name}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Lieu: {festival.adress}
+                  Lieu: {festival.adress + festival.zipcode}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   Date: {festival.creationDate}

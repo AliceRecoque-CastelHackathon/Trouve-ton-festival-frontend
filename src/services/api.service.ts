@@ -8,8 +8,8 @@
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 
-const API_BASED_URL = 'https://187e-77-147-76-102.ngrok-free.app';
-
+const API_BASED_URL = 'http://localhost:3003';
+// const API_BASED_URL = 'https://187e-77-147-76-102.ngrok-free.app' ?? '';
 import axios, {
   AxiosError,
   AxiosInstance,
