@@ -7,5 +7,5 @@ export enum TextLinkHrefEnum {
   profile = '/profile',
   home = '/',
   festival = '/festivalDetail',
-  festivalList = '/festivalList',
+  festivalList = '/festival',
 }

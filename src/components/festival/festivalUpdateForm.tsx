@@ -46,11 +46,18 @@ export default function UserUpdateForm() {
         : userDataLoggedIn?.firstname,
     });
     
-    const updatedUserData: UserGetDto =
+    const updatedFestivalData: UserGetDto =
       await apiService.userUpdate(updatedUser);
-    setUserDataLoggedIn(updatedUserData);
+    setUserDataLoggedIn(updatedFestivalData);
     setLastname('');
     setFirstname('');
+    setFestivalName('');
+    setFestivalAdress('');
+    setFestivalWeb('');
+    setFestivalEmail('');
+    setFestivalCategorie('');
+    setFestivalOrganisateur('');
+    setFestivalDate('');
   }
 
   return (

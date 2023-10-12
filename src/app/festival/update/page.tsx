@@ -1,6 +1,6 @@
 'use client';
 import * as React from 'react';
-import FestivalDetails from './../../../mockupData.json'
+import FestivalDetails from '../../../mockupData.json'
 import { useState } from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -15,8 +15,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import { UploadTypesEnum } from '@/utils/enums/upload-type';
 import { ImageFileExtensionEnum } from '@/utils/enums/file-extension';
 import { useUserContext } from '@/utils/contexts/UserContext';
-
-console.log(FestivalDetails.results);
 
 export default function FestivalUpdate() {
   const [isFileUploadVisible, setIsFileUploadVisible] =
@@ -41,14 +39,14 @@ export default function FestivalUpdate() {
           sx={{ width: '70%', margin: 'auto', position: 'relative' }}
           title="Festival"
         >
-          <Image
+          {/* <Image
             className="imageFormCard"
             loader={imageLoader}
             src={userDataLoggedIn?.avatarUrl ?? 'images/default_user.png'}
             alt="user profile image"
             width={440}
             height={440}
-          />
+          /> */}
           <IconButton
             aria-label="edit festival"
             size="large"

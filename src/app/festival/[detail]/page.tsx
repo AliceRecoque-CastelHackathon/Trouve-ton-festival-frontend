@@ -1,9 +1,7 @@
 'use client';
-import FestivalDetails from '../../../mockupData.json'
+// import FestivalDetails from '../../../mockupData.json'
 import * as React from 'react';
-
-import { useRouter } from 'next/navigation';
-// import { useState } from 'react';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -13,23 +11,42 @@ import Link from 'next/link';
 import Image, { ImageLoader } from 'next/image';
 import { useUserContext } from '@/utils/contexts/UserContext';
 import { Container, Stack } from '@mui/material';
-// import { useParams } from 'next/navigation';
+import { ApiService, FestivalGetAnyDto, FestivalGetDto } from '@/services/api.service';
+import { useState, useEffect } from 'react';
+import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
+
 
 
 
 export default function Festival() {
   const { userDataLoggedIn } = useUserContext();
   const router = useRouter();
-  // const {id} = router.query
+  const [festival, setFestival] = useState<FestivalGetDto>();
+  const apiService: ApiService = new ApiService();
 
-  // console.log({id})
-  const [festival, setFestival] = FestivalDetails.results
-  
-  // const params = useParams()
-  // const FestivalDetailId = params.festivalDetailId;
+
+    const params = useSearchParams();
+    
+    useEffect(() =>{ 
+    const id = params.get('idFestival')
+    console.log(id)
+    if(id){
+      FetchFestivalById(parseInt(id));
+    }
+  }, [])
+
+  const FetchFestivalById = async (id: number) => { 
+    try {
+     const result = await apiService.festivalById(id)
+     setFestival(result)
+    } catch (e) {
+    }
+  };
+
   const imageLoader: ImageLoader = ({ src }) => {
     return `http://localhost:3003/${src}`;
   };
+
   
   return (
 
@@ -52,13 +69,13 @@ export default function Festival() {
         }}
       >
         <CardMedia title="Festival">
-          <Image
+          {/* <Image
             loader={imageLoader}
             src={userDataLoggedIn?.avatarUrl ?? 'images/default_user.png'}
             alt="Festival profile Image"
             width={200}
             height={200}
-          />
+          /> */}
         </CardMedia>
         <CardContent sx={{ textAlign: 'center' }}>
           <Typography gutterBottom variant="h5" component="div">
@@ -67,31 +84,31 @@ export default function Festival() {
           <div>
             <Typography variant="body2" color="text.secondary">
               Nom : 
-              {festival?.nom_du_festival}
+              {/* {festival?.nom_du_festival} */}
             </Typography>
             <Typography variant="body2" color="text.secondary">
               Lieux : 
-              {festival?.adresse_postale} {festival.code_insee_commune} 
+              {/* {festival?.adresse_postale} {festival.code_insee_commune}  */}
             </Typography>
             <Typography variant="body2" color="text.secondary">
               Site Web : 
-              {festival?.site_internet_du_festival}
+              {/* {festival?.site_internet_du_festival} */}
             </Typography>
             <Typography variant="body2" color="text.secondary">
               Email : 
-                {festival?.adresse_e_mail}
+                {/* {festival?.adresse_e_mail} */}
             </Typography>
             <Typography variant="body2" color="text.secondary">
               Categorie : 
-                {festival?.discipline_dominante}
+                {/* {festival?.discipline_dominante} */}
             </Typography>
             <Typography variant="body2" color="text.secondary">
               Organisateur : 
-                {festival?.libelle_epci_collage_en_valeur}
+                {/* {festival?.libelle_epci_collage_en_valeur} */}
             </Typography>
             <Typography variant="body2" color="text.secondary">
               Date : 
-                {festival?.periode_principale_de_deroulement_du_festival}
+                {/* {festival?.periode_principale_de_deroulement_du_festival} */}
             </Typography>
             
 
@@ -102,7 +119,7 @@ export default function Festival() {
             <Link href={'/festival/update'} style={{ textDecoration: 'none' }}>
               Modifier
             </Link>
-            <Link href={'/'} style={{ textDecoration: 'none' }}>
+            <Link href={'/festival'} style={{ textDecoration: 'none' }}>
               Annuler
             </Link>
           </Stack>
