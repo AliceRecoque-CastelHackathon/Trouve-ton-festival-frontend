@@ -40,7 +40,6 @@ export default function Home() {
     </>
   ) : (
     <>
-      <NavBar />
       <Container>
         <h1>Veuillez vous connecter</h1>
         <Button color="inherit" onClick={() => router.push('/login')}>
