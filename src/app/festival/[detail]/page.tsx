@@ -11,12 +11,9 @@ import Link from 'next/link';
 import Image, { ImageLoader } from 'next/image';
 import { useUserContext } from '@/utils/contexts/UserContext';
 import { Container, Stack } from '@mui/material';
-import { ApiService, FestivalGetAnyDto, FestivalGetDto } from '@/services/api.service';
+import { ApiService, FestivalGetDto } from '@/services/api.service';
 import { useState, useEffect } from 'react';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
-
-
-
 
 export default function Festival() {
   const { userDataLoggedIn } = useUserContext();
@@ -24,32 +21,30 @@ export default function Festival() {
   const [festival, setFestival] = useState<FestivalGetDto>();
   const apiService: ApiService = new ApiService();
 
+  const params = useSearchParams();
 
-    const params = useSearchParams();
-    
-    useEffect(() =>{ 
-    const id = params.get('idFestival')
-    console.log(id)
-    if(id){
+  useEffect(() => {
+    const id = params.get('idFestival');
+    console.log(id);
+    if (id) {
       FetchFestivalById(parseInt(id));
     }
-  }, [])
+  }, []);
 
-  const FetchFestivalById = async (id: number) => { 
+  const FetchFestivalById = async (id: number) => {
     try {
-     const result = await apiService.festivalById(id)
-     setFestival(result)
-    } catch (e) {
-    }
+      const result = await apiService.festivalById(id);
+      console.log(result);
+
+      setFestival(result);
+    } catch (e) {}
   };
 
   const imageLoader: ImageLoader = ({ src }) => {
     return `http://localhost:3003/${src}`;
   };
 
-  
   return (
-
     <Container
       sx={{
         display: 'flex',
@@ -83,35 +78,21 @@ export default function Festival() {
           </Typography>
           <div>
             <Typography variant="body2" color="text.secondary">
-              Nom : 
-              {/* {festival?.nom_du_festival} */}
+              Nom :{festival?.name}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Lieux : 
-              {/* {festival?.adresse_postale} {festival.code_insee_commune}  */}
+              Lieux :{festival?.adress} {festival?.zipcode}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Site Web : 
-              {/* {festival?.site_internet_du_festival} */}
+              Site Web :{festival?.website}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Email : 
-                {/* {festival?.adresse_e_mail} */}
+              Email :{festival?.email}
             </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Categorie : 
-                {/* {festival?.discipline_dominante} */}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Organisateur : 
-                {/* {festival?.libelle_epci_collage_en_valeur} */}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Date : 
-                {/* {festival?.periode_principale_de_deroulement_du_festival} */}
-            </Typography>
-            
-
+            {/* <Typography variant="body2" color="text.secondary">
+              Date :
+              {/* {festival?.periode_principale_de_deroulement_du_festival} */}
+            {/* </Typography>  */}
           </div>
         </CardContent>
         <CardActions>
@@ -128,4 +109,3 @@ export default function Festival() {
     </Container>
   );
 }
-
