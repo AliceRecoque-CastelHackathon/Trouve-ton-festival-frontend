@@ -1,4 +1,4 @@
-import { GoogleMap, useLoadScript } from '@react-google-maps/api';
+import { GoogleMap, MarkerF, useLoadScript } from '@react-google-maps/api';
 import React, { useMemo, useState } from 'react';
 
 export default function Map() {
@@ -27,16 +27,6 @@ export default function Map() {
         mapTypeId={google.maps.MapTypeId.ROADMAP}
         mapContainerStyle={{ width: '800px', height: '800px' }}
         onLoad={() => console.log('Map Component Loaded...')}
-      >
-        {/* <MarkerF
-              position={{ lat: geoPosY, lng: geoPosX }}
-              icon={{
-                url: '/images/marker.png',
-                scaledSize: new google.maps.Size(50, 50),
-                origin: new google.maps.Point(0, 0),
-                anchor: new google.maps.Point(25, 25),
-              }}
-            /> */}
-      </GoogleMap>
+      ></GoogleMap>
     );
 }

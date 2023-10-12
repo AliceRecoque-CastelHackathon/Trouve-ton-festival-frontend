@@ -8,7 +8,7 @@
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 
-const API_BASED_URL = process.env.NEXT_PUBLIC_API_BASED_URL ?? '';
+const API_BASED_URL = 'https://187e-77-147-76-102.ngrok-free.app';
 
 import axios, {
   AxiosError,
@@ -632,7 +632,7 @@ export class ApiService {
    * @return A list of festival
    */
   festivalGetMany(
-    body: FestivalGetAnyDto,
+    body: FestivalGetManyDto,
     cancelToken?: CancelToken | undefined,
   ): Promise<FestivalGetDto[]> {
     let url_ = this.baseUrl + '/festival/getMany';
@@ -752,7 +752,7 @@ export class ApiService {
   /**
    * @return The created festival
    */
-  festivalCreate(
+  festivalCreatePost(
     body: FestivalCreateDto,
     cancelToken?: CancelToken | undefined,
   ): Promise<FestivalGetDto[]> {
@@ -782,11 +782,75 @@ export class ApiService {
         }
       })
       .then((_response: AxiosResponse) => {
-        return this.processFestivalCreate(_response);
+        return this.processFestivalCreatePost(_response);
       });
   }
 
-  protected processFestivalCreate(
+  protected processFestivalCreatePost(
+    response: AxiosResponse,
+  ): Promise<FestivalGetDto[]> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && typeof response.headers === 'object') {
+      for (let k in response.headers) {
+        if (response.headers.hasOwnProperty(k)) {
+          _headers[k] = response.headers[k];
+        }
+      }
+    }
+    {
+      const _responseText = response.data;
+      let resultdefault: any = null;
+      let resultDatadefault = _responseText;
+      if (Array.isArray(resultDatadefault)) {
+        resultdefault = [] as any;
+        for (let item of resultDatadefault)
+          resultdefault!.push(FestivalGetDto.fromJS(item));
+      } else {
+        resultdefault = <any>null;
+      }
+      return Promise.resolve<FestivalGetDto[]>(resultdefault);
+    }
+  }
+
+  /**
+   * @return The created festival
+   */
+  festivalCreatePut(
+    body: FestivalUpdateDto,
+    cancelToken?: CancelToken | undefined,
+  ): Promise<FestivalGetDto[]> {
+    let url_ = this.baseUrl + '/festival/create';
+    url_ = url_.replace(/[?&]$/, '');
+
+    const content_ = JSON.stringify(body);
+
+    let options_: AxiosRequestConfig = {
+      data: content_,
+      method: 'PUT',
+      url: url_,
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      cancelToken,
+    };
+
+    return this.instance
+      .request(options_)
+      .catch((_error: any) => {
+        if (isAxiosError(_error) && _error.response) {
+          return _error.response;
+        } else {
+          throw _error;
+        }
+      })
+      .then((_response: AxiosResponse) => {
+        return this.processFestivalCreatePut(_response);
+      });
+  }
+
+  protected processFestivalCreatePut(
     response: AxiosResponse,
   ): Promise<FestivalGetDto[]> {
     const status = response.status;
@@ -1176,7 +1240,7 @@ export interface IResetPwdDto {
   [key: string]: any;
 }
 
-export class FestivalGetAnyDto implements IFestivalGetAnyDto {
+export class FestivalGetManyDto implements IFestivalGetManyDto {
   limit?: number;
   offset?: number;
   categoryId?: number;
@@ -1184,7 +1248,7 @@ export class FestivalGetAnyDto implements IFestivalGetAnyDto {
 
   [key: string]: any;
 
-  constructor(data?: IFestivalGetAnyDto) {
+  constructor(data?: IFestivalGetManyDto) {
     if (data) {
       for (var property in data) {
         if (data.hasOwnProperty(property))
@@ -1205,9 +1269,9 @@ export class FestivalGetAnyDto implements IFestivalGetAnyDto {
     }
   }
 
-  static fromJS(data: any): FestivalGetAnyDto {
+  static fromJS(data: any): FestivalGetManyDto {
     data = typeof data === 'object' ? data : {};
-    let result = new FestivalGetAnyDto();
+    let result = new FestivalGetManyDto();
     result.init(data);
     return result;
   }
@@ -1225,7 +1289,7 @@ export class FestivalGetAnyDto implements IFestivalGetAnyDto {
   }
 }
 
-export interface IFestivalGetAnyDto {
+export interface IFestivalGetManyDto {
   limit?: number;
   offset?: number;
   categoryId?: number;
@@ -1234,19 +1298,119 @@ export interface IFestivalGetAnyDto {
   [key: string]: any;
 }
 
+export class FestivalCategoryEntity implements IFestivalCategoryEntity {
+  id!: number;
+  label!: string;
+
+  [key: string]: any;
+
+  constructor(data?: IFestivalCategoryEntity) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      for (var property in _data) {
+        if (_data.hasOwnProperty(property)) this[property] = _data[property];
+      }
+      this.id = _data['id'];
+      this.label = _data['label'];
+    }
+  }
+
+  static fromJS(data: any): FestivalCategoryEntity {
+    data = typeof data === 'object' ? data : {};
+    let result = new FestivalCategoryEntity();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    for (var property in this) {
+      if (this.hasOwnProperty(property)) data[property] = this[property];
+    }
+    data['id'] = this.id;
+    data['label'] = this.label;
+    return data;
+  }
+}
+
+export interface IFestivalCategoryEntity {
+  id: number;
+  label: string;
+
+  [key: string]: any;
+}
+
+export class FestivalSubCategoryEntity implements IFestivalSubCategoryEntity {
+  id!: number;
+  label!: string;
+
+  [key: string]: any;
+
+  constructor(data?: IFestivalSubCategoryEntity) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      for (var property in _data) {
+        if (_data.hasOwnProperty(property)) this[property] = _data[property];
+      }
+      this.id = _data['id'];
+      this.label = _data['label'];
+    }
+  }
+
+  static fromJS(data: any): FestivalSubCategoryEntity {
+    data = typeof data === 'object' ? data : {};
+    let result = new FestivalSubCategoryEntity();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    for (var property in this) {
+      if (this.hasOwnProperty(property)) data[property] = this[property];
+    }
+    data['id'] = this.id;
+    data['label'] = this.label;
+    return data;
+  }
+}
+
+export interface IFestivalSubCategoryEntity {
+  id: number;
+  label: string;
+
+  [key: string]: any;
+}
+
 export class FestivalGetDto implements IFestivalGetDto {
   id!: number;
-  idCategory!: number;
-  idSubCategory!: number;
+  category!: FestivalCategoryEntity | undefined;
+  subCategory!: FestivalSubCategoryEntity[] | undefined;
   region!: string;
   department!: string;
   zipcode!: number;
-  adress!: string;
+  address!: string;
   website?: string | undefined;
   email!: string;
   creationDate?: string | undefined;
-  geoPosX?: number | undefined;
-  geoPosY?: number | undefined;
+  geoPosX!: number;
+  geoPosY!: number;
   externalId?: string | undefined;
 
   [key: string]: any;
@@ -1266,12 +1430,18 @@ export class FestivalGetDto implements IFestivalGetDto {
         if (_data.hasOwnProperty(property)) this[property] = _data[property];
       }
       this.id = _data['id'];
-      this.idCategory = _data['idCategory'];
-      this.idSubCategory = _data['idSubCategory'];
+      this.category = _data['category']
+        ? FestivalCategoryEntity.fromJS(_data['category'])
+        : <any>undefined;
+      if (Array.isArray(_data['subCategory'])) {
+        this.subCategory = [] as any;
+        for (let item of _data['subCategory'])
+          this.subCategory!.push(FestivalSubCategoryEntity.fromJS(item));
+      }
       this.region = _data['region'];
       this.department = _data['department'];
       this.zipcode = _data['zipcode'];
-      this.adress = _data['adress'];
+      this.address = _data['address'];
       this.website = _data['website'];
       this.email = _data['email'];
       this.creationDate = _data['creationDate'];
@@ -1294,12 +1464,16 @@ export class FestivalGetDto implements IFestivalGetDto {
       if (this.hasOwnProperty(property)) data[property] = this[property];
     }
     data['id'] = this.id;
-    data['idCategory'] = this.idCategory;
-    data['idSubCategory'] = this.idSubCategory;
+    data['category'] = this.category ? this.category.toJSON() : <any>undefined;
+    if (Array.isArray(this.subCategory)) {
+      data['subCategory'] = [];
+      for (let item of this.subCategory)
+        data['subCategory'].push(item.toJSON());
+    }
     data['region'] = this.region;
     data['department'] = this.department;
     data['zipcode'] = this.zipcode;
-    data['adress'] = this.adress;
+    data['address'] = this.address;
     data['website'] = this.website;
     data['email'] = this.email;
     data['creationDate'] = this.creationDate;
@@ -1312,17 +1486,17 @@ export class FestivalGetDto implements IFestivalGetDto {
 
 export interface IFestivalGetDto {
   id: number;
-  idCategory: number;
-  idSubCategory: number;
+  category: FestivalCategoryEntity | undefined;
+  subCategory: FestivalSubCategoryEntity[] | undefined;
   region: string;
   department: string;
   zipcode: number;
-  adress: string;
+  address: string;
   website?: string | undefined;
   email: string;
   creationDate?: string | undefined;
-  geoPosX?: number | undefined;
-  geoPosY?: number | undefined;
+  geoPosX: number;
+  geoPosY: number;
   externalId?: string | undefined;
 
   [key: string]: any;
@@ -1330,16 +1504,16 @@ export interface IFestivalGetDto {
 
 export class FestivalCreateDto implements IFestivalCreateDto {
   idCategory!: number;
-  idSubCategory!: number;
+  idSubCategory!: number[];
   region!: string;
   department!: string;
   zipcode!: number;
-  adress!: string;
+  address!: string;
   website?: string | undefined;
   email!: string;
   creationDate?: string | undefined;
-  geoPosX?: number | undefined;
-  geoPosY?: number | undefined;
+  geoPosX!: number;
+  geoPosY!: number;
 
   [key: string]: any;
 
@@ -1350,6 +1524,9 @@ export class FestivalCreateDto implements IFestivalCreateDto {
           (<any>this)[property] = (<any>data)[property];
       }
     }
+    if (!data) {
+      this.idSubCategory = [];
+    }
   }
 
   init(_data?: any) {
@@ -1358,11 +1535,14 @@ export class FestivalCreateDto implements IFestivalCreateDto {
         if (_data.hasOwnProperty(property)) this[property] = _data[property];
       }
       this.idCategory = _data['idCategory'];
-      this.idSubCategory = _data['idSubCategory'];
+      if (Array.isArray(_data['idSubCategory'])) {
+        this.idSubCategory = [] as any;
+        for (let item of _data['idSubCategory']) this.idSubCategory!.push(item);
+      }
       this.region = _data['region'];
       this.department = _data['department'];
       this.zipcode = _data['zipcode'];
-      this.adress = _data['adress'];
+      this.address = _data['address'];
       this.website = _data['website'];
       this.email = _data['email'];
       this.creationDate = _data['creationDate'];
@@ -1384,11 +1564,14 @@ export class FestivalCreateDto implements IFestivalCreateDto {
       if (this.hasOwnProperty(property)) data[property] = this[property];
     }
     data['idCategory'] = this.idCategory;
-    data['idSubCategory'] = this.idSubCategory;
+    if (Array.isArray(this.idSubCategory)) {
+      data['idSubCategory'] = [];
+      for (let item of this.idSubCategory) data['idSubCategory'].push(item);
+    }
     data['region'] = this.region;
     data['department'] = this.department;
     data['zipcode'] = this.zipcode;
-    data['adress'] = this.adress;
+    data['address'] = this.address;
     data['website'] = this.website;
     data['email'] = this.email;
     data['creationDate'] = this.creationDate;
@@ -1400,16 +1583,111 @@ export class FestivalCreateDto implements IFestivalCreateDto {
 
 export interface IFestivalCreateDto {
   idCategory: number;
-  idSubCategory: number;
+  idSubCategory: number[];
   region: string;
   department: string;
   zipcode: number;
-  adress: string;
+  address: string;
   website?: string | undefined;
   email: string;
   creationDate?: string | undefined;
-  geoPosX?: number | undefined;
-  geoPosY?: number | undefined;
+  geoPosX: number;
+  geoPosY: number;
+
+  [key: string]: any;
+}
+
+export class FestivalUpdateDto implements IFestivalUpdateDto {
+  id!: number;
+  idCategory!: number;
+  idSubCategory!: number[];
+  region!: string;
+  department!: string;
+  zipcode!: number;
+  address!: string;
+  website?: string | undefined;
+  email!: string;
+  geoPosX!: number;
+  geoPosY!: number;
+
+  [key: string]: any;
+
+  constructor(data?: IFestivalUpdateDto) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+    if (!data) {
+      this.idSubCategory = [];
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      for (var property in _data) {
+        if (_data.hasOwnProperty(property)) this[property] = _data[property];
+      }
+      this.id = _data['id'];
+      this.idCategory = _data['idCategory'];
+      if (Array.isArray(_data['idSubCategory'])) {
+        this.idSubCategory = [] as any;
+        for (let item of _data['idSubCategory']) this.idSubCategory!.push(item);
+      }
+      this.region = _data['region'];
+      this.department = _data['department'];
+      this.zipcode = _data['zipcode'];
+      this.address = _data['address'];
+      this.website = _data['website'];
+      this.email = _data['email'];
+      this.geoPosX = _data['geoPosX'];
+      this.geoPosY = _data['geoPosY'];
+    }
+  }
+
+  static fromJS(data: any): FestivalUpdateDto {
+    data = typeof data === 'object' ? data : {};
+    let result = new FestivalUpdateDto();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    for (var property in this) {
+      if (this.hasOwnProperty(property)) data[property] = this[property];
+    }
+    data['id'] = this.id;
+    data['idCategory'] = this.idCategory;
+    if (Array.isArray(this.idSubCategory)) {
+      data['idSubCategory'] = [];
+      for (let item of this.idSubCategory) data['idSubCategory'].push(item);
+    }
+    data['region'] = this.region;
+    data['department'] = this.department;
+    data['zipcode'] = this.zipcode;
+    data['address'] = this.address;
+    data['website'] = this.website;
+    data['email'] = this.email;
+    data['geoPosX'] = this.geoPosX;
+    data['geoPosY'] = this.geoPosY;
+    return data;
+  }
+}
+
+export interface IFestivalUpdateDto {
+  id: number;
+  idCategory: number;
+  idSubCategory: number[];
+  region: string;
+  department: string;
+  zipcode: number;
+  address: string;
+  website?: string | undefined;
+  email: string;
+  geoPosX: number;
+  geoPosY: number;
 
   [key: string]: any;
 }
