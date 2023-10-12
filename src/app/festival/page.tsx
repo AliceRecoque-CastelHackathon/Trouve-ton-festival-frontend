@@ -89,7 +89,6 @@ export default function FestivalList() {
               </CardContent>
               <CardActions>
                 <Link
-                  href={'./../festival/' + festival.id}
                   style={{ textDecoration: 'none', margin: 'auto' }}
                 >
                   Details
@@ -97,6 +96,41 @@ export default function FestivalList() {
               </CardActions>
             </Card>
           </Stack>
+          <Card
+            key={index}
+            sx={{
+              marginTop: 2,
+              marginLeft: 2,
+              borderRadius: 2,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                Festival
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Nom: {festival.nom_du_festival}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Lieu: {festival.adresse_postale}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Organisateur : {festival.libelle_epci_collage_en_valeur}
+              </Typography>
+            </CardContent>
+            <CardActions>
+              <Link
+                href={'./../festival/detail?idFestival=' + festival.id}
+                style={{ textDecoration: 'none', margin: 'auto' }}
+              >
+                Details
+              </Link>
+            </CardActions>
+          </Card>
         );
       })}
     </>
