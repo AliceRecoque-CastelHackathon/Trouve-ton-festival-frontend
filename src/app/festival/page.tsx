@@ -65,7 +65,7 @@ export default function FestivalList() {
             </CardContent>
             <CardActions>
               <Link
-                href={'./../festival/' + festival.id}
+                href={'./../festival/detail?idFestival=' + festival.id}
                 style={{ textDecoration: 'none', margin: 'auto' }}
               >
                 Details

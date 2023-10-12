@@ -555,8 +555,8 @@ export class ApiService {
     /**
      * @return A list of festival
      */
-    festivalMany(body: FestivalGetAnyDto, cancelToken?: CancelToken | undefined): Promise<FestivalGetDto[]> {
-        let url_ = this.baseUrl + "/festival/many";
+    festivalGetMany(body: FestivalGetAnyDto, cancelToken?: CancelToken | undefined): Promise<FestivalGetDto[]> {
+        let url_ = this.baseUrl + "/festival/getMany";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -579,11 +579,11 @@ export class ApiService {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processFestivalMany(_response);
+            return this.processFestivalGetMany(_response);
         });
     }
 
-    protected processFestivalMany(response: AxiosResponse): Promise<FestivalGetDto[]> {
+    protected processFestivalGetMany(response: AxiosResponse): Promise<FestivalGetDto[]> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -611,9 +611,9 @@ export class ApiService {
     }
 
     /**
-     * @return A list of festival
+     * @return The festival with specified id
      */
-    festivalById(id: number, cancelToken?: CancelToken | undefined): Promise<FestivalGetDto[]> {
+    festivalById(id: number, cancelToken?: CancelToken | undefined): Promise<FestivalGetDto> {
         let url_ = this.baseUrl + "/festival/byId/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -640,7 +640,58 @@ export class ApiService {
         });
     }
 
-    protected processFestivalById(response: AxiosResponse): Promise<FestivalGetDto[]> {
+    protected processFestivalById(response: AxiosResponse): Promise<FestivalGetDto> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        {
+            const _responseText = response.data;
+            let resultdefault: any = null;
+            let resultDatadefault  = _responseText;
+            resultdefault = FestivalGetDto.fromJS(resultDatadefault);
+            return Promise.resolve<FestivalGetDto>(resultdefault);
+
+        }
+    }
+
+    /**
+     * @return The created festival
+     */
+    festivalCreate(body: FestivalCreateDto, cancelToken?: CancelToken | undefined): Promise<FestivalGetDto[]> {
+        let url_ = this.baseUrl + "/festival/create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processFestivalCreate(_response);
+        });
+    }
+
+    protected processFestivalCreate(response: AxiosResponse): Promise<FestivalGetDto[]> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1196,6 +1247,94 @@ export interface IFestivalGetDto {
     geoPosX?: number | undefined;
     geoPosY?: number | undefined;
     externalId?: string | undefined;
+
+    [key: string]: any;
+}
+
+export class FestivalCreateDto implements IFestivalCreateDto {
+    idCategory!: number;
+    idSubCategory!: number;
+    region!: string;
+    department!: string;
+    zipcode!: number;
+    adress!: string;
+    website?: string | undefined;
+    email!: string;
+    creationDate?: string | undefined;
+    geoPosX?: number | undefined;
+    geoPosY?: number | undefined;
+
+    [key: string]: any;
+
+    constructor(data?: IFestivalCreateDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.idCategory = _data["idCategory"];
+            this.idSubCategory = _data["idSubCategory"];
+            this.region = _data["region"];
+            this.department = _data["department"];
+            this.zipcode = _data["zipcode"];
+            this.adress = _data["adress"];
+            this.website = _data["website"];
+            this.email = _data["email"];
+            this.creationDate = _data["creationDate"];
+            this.geoPosX = _data["geoPosX"];
+            this.geoPosY = _data["geoPosY"];
+        }
+    }
+
+    static fromJS(data: any): FestivalCreateDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new FestivalCreateDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["idCategory"] = this.idCategory;
+        data["idSubCategory"] = this.idSubCategory;
+        data["region"] = this.region;
+        data["department"] = this.department;
+        data["zipcode"] = this.zipcode;
+        data["adress"] = this.adress;
+        data["website"] = this.website;
+        data["email"] = this.email;
+        data["creationDate"] = this.creationDate;
+        data["geoPosX"] = this.geoPosX;
+        data["geoPosY"] = this.geoPosY;
+        return data;
+    }
+}
+
+export interface IFestivalCreateDto {
+    idCategory: number;
+    idSubCategory: number;
+    region: string;
+    department: string;
+    zipcode: number;
+    adress: string;
+    website?: string | undefined;
+    email: string;
+    creationDate?: string | undefined;
+    geoPosX?: number | undefined;
+    geoPosY?: number | undefined;
 
     [key: string]: any;
 }

@@ -16,8 +16,6 @@ import { UploadTypesEnum } from '@/utils/enums/upload-type';
 import { ImageFileExtensionEnum } from '@/utils/enums/file-extension';
 import { useUserContext } from '@/utils/contexts/UserContext';
 
-console.log(FestivalDetails.results);
-
 export default function FestivalUpdate() {
   const [isFileUploadVisible, setIsFileUploadVisible] =
     useState<boolean>(false);
@@ -41,14 +39,14 @@ export default function FestivalUpdate() {
           sx={{ width: '70%', margin: 'auto', position: 'relative' }}
           title="Festival"
         >
-          <Image
+          {/* <Image
             className="imageFormCard"
             loader={imageLoader}
             src={userDataLoggedIn?.avatarUrl ?? 'images/default_user.png'}
             alt="user profile image"
             width={440}
             height={440}
-          />
+          /> */}
           <IconButton
             aria-label="edit festival"
             size="large"
