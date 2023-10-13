@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography';
 import { ApiService, UserGetDto } from '../../services/api.service';
 import Link from 'next/link';
 import Image, { ImageLoader } from 'next/image';
+import { Container } from '@mui/material';
 
 export default function ProfilesList() {
   const [userArray, setUserArray] = useState<UserGetDto[]>([]);
@@ -38,50 +39,52 @@ export default function ProfilesList() {
   ) : (
     userArray?.map((user: UserGetDto, index: number) => {
       return (
-        <Card
-          key={index}
-          sx={{
-            marginTop: 2,
-            marginLeft: 2,
-            borderRadius: 2,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <CardMedia sx={{ height: 150 }} title="utilisateur">
-            <Image
-              loader={imageLoader}
-              src={user.avatarUrl ?? 'images/default_user.png'}
-              alt="user profile image"
-              width={100}
-              height={100}
-            />
-          </CardMedia>
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              Utilisateur
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Nom: {user.lastname}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Prénom: {user.firstname}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Prénom: {user.email}
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Link
-              href={'./../profile'}
-              style={{ textDecoration: 'none', margin: 'auto' }}
-            >
-              Details
-            </Link>
-          </CardActions>
-        </Card>
+        <Container sx={{paddingTop: 5}}>
+          <Card
+            key={index}
+            sx={{
+              marginTop: 2,
+              marginLeft: 2,
+              borderRadius: 2,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <CardMedia sx={{ height: 150 }} title="utilisateur">
+              <Image
+                loader={imageLoader}
+                src={user.avatarUrl ?? 'images/default_user.png'}
+                alt="user profile image"
+                width={100}
+                height={100}
+              />
+            </CardMedia>
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                Utilisateur
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Nom: {user.lastname}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Prénom: {user.firstname}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Prénom: {user.email}
+              </Typography>
+            </CardContent>
+            <CardActions>
+              <Link
+                href={'./../profile'}
+                style={{ textDecoration: 'none', margin: 'auto' }}
+              >
+                Details
+              </Link>
+            </CardActions>
+          </Card>
+        </Container>
       );
     })
   );
