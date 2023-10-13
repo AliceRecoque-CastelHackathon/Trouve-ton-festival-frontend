@@ -35,7 +35,7 @@ export default function FestivalList() {
       const festivalListResult: FestivalGetDto[] =
         await apiService.festivalGetMany({
           offset: undefined,
-          limit: 10,
+          limit: 100,
           region: undefined,
           categoryId: undefined,
         } as FestivalGetManyDto);
@@ -58,7 +58,7 @@ export default function FestivalList() {
           Ajouter un évènement
         </Button>
         <Map
-          festivalList={festivalArray}
+          festivalArray={festivalArray}
         />
         {festivalArray?.map((festival, index: number) => {
           console.log(festival);

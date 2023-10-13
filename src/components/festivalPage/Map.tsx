@@ -1,9 +1,23 @@
+import { FestivalGetDto } from '@/services/api.service';
 import { GoogleMap, useLoadScript } from '@react-google-maps/api';
 import React, { useEffect, useMemo, useState } from 'react';
 
-export default function Map() {
+interface IMapProps {
+  festivalArray: FestivalGetDto[];
+}
+
+export default function Map(props: IMapProps) {
   const [geoPosX, setGeoPosX] = useState(0);
   const [geoPosY, setGeoPosY] = useState(0);
+  const [map, setMap] = useState<google.maps.Map | null>(null);
+  const libraries = useMemo(() => ['places'], []);
+  const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
+
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY as string,
+    libraries: libraries as any,
+  });
+
   useEffect(() => {
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -15,13 +29,22 @@ export default function Map() {
       setGeoPosY(43.6323496);
     }
   }, []);
-  const libraries = useMemo(() => ['places'], []);
-  const [marker, setMarker] = React.useState<google.maps.Marker>();
 
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY as string,
-    libraries: libraries as any,
-  });
+  useEffect(() => {
+    if (isLoaded && map) {
+      let markers: google.maps.Marker[] = [];
+      props.festivalArray.forEach((festival: FestivalGetDto) => {
+        const newMarker = new google.maps.Marker({
+          position: { lat: festival.geoPosY, lng: festival.geoPosX},
+          map: map,
+          title: festival.name
+        });
+        markers.push(newMarker);
+      });
+      console.log(markers)
+      setMarkers(markers);
+    }
+  }, [props.festivalArray, isLoaded, map]);
 
   const mapOptions = useMemo<google.maps.MapOptions>(
     () => ({
@@ -33,10 +56,6 @@ export default function Map() {
     [],
   );
 
-  useEffect(() => {
-
-  }, []);
-
   if (isLoaded)
     return (
       <GoogleMap
@@ -45,7 +64,7 @@ export default function Map() {
         center={{ lng: geoPosX, lat: geoPosY }}
         mapTypeId={google.maps.MapTypeId.ROADMAP}
         mapContainerStyle={{ width: '800px', height: '800px' }}
-        onLoad={() => console.log('Map Component Loaded...')}
+        onLoad={(map) => setMap(map)}
       ></GoogleMap>
     );
 }
