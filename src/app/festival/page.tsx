@@ -101,13 +101,16 @@ export default function FestivalList() {
                     Nom: {festival.name}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Lieu: {festival.adress}
+                    Lieu: {festival.address}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Date: {festival.creationDate}
+                    Date de création: {festival.creationDate}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Site internet: {festival.website}
+                    Site internet: {festival.website ?
+                      <Link href={festival.website}>{festival.website}</Link>
+                      : <></>
+                    }
                   </Typography>
                 </CardContent>
                 <CardActions sx={{display: 'flex', justifyContent: 'center', width: '100%'}}>
