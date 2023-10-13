@@ -75,7 +75,7 @@ export default function Map(props: IMapProps) {
         zoom={14}
         center={{ lng: geoPosX, lat: geoPosY }}
         mapTypeId={google.maps.MapTypeId.ROADMAP}
-        mapContainerStyle={{ width: '600px', height: '800px' }}
+        mapContainerStyle={{ width: '600px', height: '90vh' }}
         onLoad={(map) => setMap(map)}
       ></GoogleMap>
     );
