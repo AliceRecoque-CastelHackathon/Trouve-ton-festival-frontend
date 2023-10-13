@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import {
   ApiService,
-  FestivalCreateDto,
+  // FestivalCreateDto,
   UserGetDto,
   UserUpdateDto,
 } from '../../services/api.service';

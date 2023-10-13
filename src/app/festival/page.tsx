@@ -11,7 +11,7 @@ import {
   FestivalGetDto,
 } from '../../services/api.service';
 import Link from 'next/link';
-import { Button, Stack } from '@mui/material';
+import { Box, Button, Container, Stack } from '@mui/material';
 import Map from '@/components/festivalPage/Map';
 import { useRouter } from 'next/navigation';
 
@@ -49,25 +49,27 @@ export default function FestivalList() {
   };
   return (
     <>
-      <Button onClick={() => router.push('/festival/create')}>
-        Ajouter un évènement
-      </Button>
-      <Map />
-      {festivalArray?.map((festival, index: number) => {
-        console.log(festival);
-        const handleClickOnMap = (event: React.MouseEvent<HTMLDivElement>) => {
-          setGeoPosX(festival.geoPosX);
-          setGeoPosY(festival.geoPosY);
-          setMarker(marker);
-        };
+    <Container  sx={{display: 'flex', maxHeight: '100vh'}}>
+      <Stack >
+        <Map />
+      </Stack>
+      <Stack direction={'column'} overflow={'scroll'} >
+        {festivalArray?.map((festival, index: number) => {
+          console.log(festival);
+          const handleClickOnMap = (event: React.MouseEvent<HTMLDivElement>) => {
+            setGeoPosX(festival.geoPosX);
+            setGeoPosY(festival.geoPosY);
+            setMarker(marker);
+          };
         return (
-          <Stack key={index} direction={'row-reverse'}>
             <Card
               key={index}
               sx={{
                 cursor: 'pointer',
                 marginTop: 2,
-                marginLeft: 2,
+                minHeight: 250,
+                marginLeft: 3,
+                maxHeight: '100vh',
                 borderRadius: 2,
                 display: 'flex',
                 flexDirection: 'column',
@@ -76,7 +78,7 @@ export default function FestivalList() {
               }}
               onClick={handleClickOnMap}
             >
-              <CardContent>
+              <CardContent >
                 <Typography gutterBottom variant="h5" component="div">
                   Festival
                 </Typography>
@@ -99,18 +101,19 @@ export default function FestivalList() {
                   style={{ textDecoration: 'none', margin: 'auto' }}
                 >
                   Details
-                </Link><br/>
-                <Link
+                </Link>
+              </CardActions>
+              <Link
                   href={'./../festival/detail?idFestival=' + festival.id}
                   style={{ textDecoration: 'none', margin: 'auto' }}
                 >
                   Créer un évenement
                 </Link>
-              </CardActions>
             </Card>
-          </Stack>
         );
       })}
+        </Stack>
+      </Container>
     </>
   );
 }
