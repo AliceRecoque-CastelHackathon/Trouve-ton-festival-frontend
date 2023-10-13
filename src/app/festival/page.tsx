@@ -50,23 +50,25 @@ export default function FestivalList() {
   };
   return (
     <>
-    <Container sx={{display: 'flex'}} >
+    <Container sx={{display: 'flex', paddingTop: 5}} >
     {loading ?
       <LoadingComponent />
       :
       <>
-      <Stack >
-
-        <Button onClick={() => router.push('/festival/create')}>
-          Ajouter un évènement
-        </Button>
         <Box sx={{position: 'fixed', width: '45vw', left:20}}>
-        <Map 
-          festivalArray={festivalArray}
-        />
+          <Map
+            festivalArray={festivalArray}
+          />
         </Box>
-      </Stack>
-        <Stack direction={'column'} sx={{width: '45vw', marginLeft: 50}} >
+        <Stack direction={'column'} alignItems={'center'} sx={{width: '45vw', marginLeft: 75}} >
+          <Button
+            variant='contained'
+            color='success'
+            onClick={() => router.push('/festival/create')}
+            sx={{ maxWidth: 150}}
+          >
+            Ajouter un évènement
+          </Button>
         {festivalArray?.map((festival, index: number) => {
           console.log(festival);
           const handleClickOnMap = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -84,8 +86,10 @@ export default function FestivalList() {
                   borderRadius: 2,
                   display: 'flex',
                   flexDirection: 'column',
-                  alignItems: 'center',
+                  alignItems: 'start',
                   justifyContent: 'center',
+                  paddingLeft: 5,
+                  width: '100%'
                 }}
                 onClick={handleClickOnMap}
               >
@@ -106,10 +110,10 @@ export default function FestivalList() {
                     Site internet: {festival.website}
                   </Typography>
                 </CardContent>
-                <CardActions>
+                <CardActions sx={{display: 'flex', justifyContent: 'center', width: '100%'}}>
                   <Link
                     href={'./../festival/detail?idFestival=' + festival.id}
-                    style={{ textDecoration: 'none', margin: 'auto' }}
+                    style={{ textDecoration: 'none' }}
                   >
                     Details
                   </Link>
@@ -118,10 +122,10 @@ export default function FestivalList() {
 
           );
         })}
-          </Stack>
+        </Stack>
       </>
     }
-    
+
     </Container>
     </>
   );

@@ -49,7 +49,6 @@ export default function Map(props: IMapProps) {
             anchor: newMarker,
             map: map,
           });
-          // router.push(`${TextLinkHrefEnum.festival}?idFestival=${festival.id}`);
         });
 
         markers.push(newMarker);
@@ -72,7 +71,7 @@ export default function Map(props: IMapProps) {
     return (
       <GoogleMap
         options={mapOptions}
-        zoom={14}
+        zoom={8}
         center={{ lng: geoPosX, lat: geoPosY }}
         mapTypeId={google.maps.MapTypeId.ROADMAP}
         mapContainerStyle={{ width: '600px', height: '90vh' }}

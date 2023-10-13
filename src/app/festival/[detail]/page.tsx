@@ -81,7 +81,7 @@ export default function Festival() {
               Nom :{festival?.name}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Lieux :{festival?.adress + festival?.zipcode}
+              Lieux :{festival?.address ?? "" + festival?.zipcode}
             </Typography>
             <Typography variant="body2" color="text.secondary">
               Site Web :{festival?.website}
