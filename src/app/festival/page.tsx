@@ -54,6 +54,14 @@ export default function FestivalList() {
         <Map />
       </Stack>
       <Stack direction={'column'} overflow={'scroll'} >
+      <Stack>
+      <Button variant="contained" color="success"
+                  href={'./../festival/create?idFestival='}
+                  style={{ textDecoration: 'none', margin: 'auto' }}
+                >
+                  Créer un évenement
+      </Button>
+      </Stack>
         {festivalArray?.map((festival, index: number) => {
           console.log(festival);
           const handleClickOnMap = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -103,17 +111,14 @@ export default function FestivalList() {
                   Details
                 </Link>
               </CardActions>
-              <Link
-                  href={'./../festival/detail?idFestival=' + festival.id}
-                  style={{ textDecoration: 'none', margin: 'auto' }}
-                >
-                  Créer un évenement
-                </Link>
+
             </Card>
         );
       })}
         </Stack>
+
       </Container>
+
     </>
   );
 }
