@@ -1800,6 +1800,11 @@ globby@^11.1.0:
     merge2 "^1.4.1"
     slash "^3.0.0"
 
+google-maps-react-markers@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/google-maps-react-markers/-/google-maps-react-markers-2.0.2.tgz#b4991d4984f20f8ddeba289cc1058bbaf68fd248"
+  integrity sha512-xhVjr0b7lhhz9hVBy6wU/8bhpMN3JqN3juXIAw46Ar7cWjkDPOGypBGYW9yu032VWsXDerfg4J5LizQ7SM/GLg==
+
 gopd@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/gopd/-/gopd-1.0.1.tgz#29ff76de69dac7489b7c0918a5788e56477c332c"

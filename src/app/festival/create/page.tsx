@@ -1,3 +1,4 @@
+'use client';
 import { ApiService, FestivalCreateDto } from '@/services/api.service';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -19,24 +20,24 @@ export default function CreateFestival() {
   const [dateEnd, setDateEnd] = useState<string>('');
   const [festivalData, setFestivalData] = useState<FestivalCreateDto>();
 
-  const handleSubmitForm = async () => {
-    const createdFestival: FestivalCreateDto = new FestivalCreateDto({
-      name: name,
-      region: region,
-      department: department,
-      zipcode: zipcode,
-      address: address,
-      website: website,
-      email: email,
-      creationDate: creationDate,
-      geoPosX: geoPosX,
-      geoPosY: geoPosY,
-      dateStart: dateStart,
-      dateEnd: dateEnd,
-    });
-    const createdFestivalData: FestivalCreateDto =
-      await apiService.festivalCreatePost(createdFestival);
-    setFestivalData(createdFestivalData);
-  };
+  // const handleSubmitForm = async () => {
+  //   const createdFestival: FestivalCreateDto = new FestivalCreateDto({
+  //     name: name,
+  //     region: region,
+  //     department: department,
+  //     zipcode: zipcode,
+  //     address: address,
+  //     website: website,
+  //     email: email,
+  //     creationDate: creationDate,
+  //     geoPosX: geoPosX,
+  //     geoPosY: geoPosY,
+  //     dateStart: dateStart,
+  //     dateEnd: dateEnd,
+  //   });
+  //   const createdFestivalData: FestivalCreateDto =
+  //     await apiService.festivalCreatePost(createdFestival);
+  //   setFestivalData(createdFestivalData);
+  // };
   return <></>;
 }
