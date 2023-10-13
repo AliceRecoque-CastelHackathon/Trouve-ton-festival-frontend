@@ -6,6 +6,8 @@ import { Button, Container, Typography } from '@mui/material';
 import { useUserContext } from '@/utils/contexts/UserContext';
 import NavBar from '@/components/navBar/NavBar';
 import { useRouter } from 'next/navigation';
+import { TextLinkHrefEnum } from '@/utils/enums/text-link-href';
+import LoadingComponent from '@/components/loading';
 
 export default function Home() {
   const apiService: ApiService = new ApiService();
@@ -17,36 +19,23 @@ export default function Home() {
   }, []);
 
   const fetchuserDataLoggedInToSetIntoContext = async () => {
-    type customJwtPayload = JwtPayload & {
-      userId: number;
-    };
     const token = localStorage.getItem('access_token');
     if (token) {
+      type customJwtPayload = JwtPayload & {
+        userId: number;
+      };
       const decodedToken = jwt_decode<customJwtPayload>(token);
       const userData = await apiService.userById(decodedToken.userId);
       console.log(userData);
 
       setUserDataLoggedIn(userData);
     }
+
+    router.push(TextLinkHrefEnum.festivalList);
   };
+
   // Test of the logout and of the right display of the context OK, need to use it in an app Bar then//
-  return userDataLoggedIn ? (
-    <>
-      <NavBar />
-      <Container sx={{paddingTop: 5}}>
-        <Typography>
-          Bonjour {userDataLoggedIn.firstname ?? userDataLoggedIn.email}
-        </Typography>
-      </Container>
-    </>
-  ) : (
-    <>
-      <Container sx={{paddingTop: 5}}>
-        <h1>Veuillez vous connecter</h1>
-        <Button color="inherit" onClick={() => router.push('/login')}>
-          Login
-        </Button>
-      </Container>
-    </>
-  );
+  return (
+    <LoadingComponent />
+  )
 }

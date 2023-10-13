@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import ToolBoxService from '@/services/toolbox.service';
 import { useUserContext } from '@/utils/contexts/UserContext';
+import { TextLinkHrefEnum } from '@/utils/enums/text-link-href';
 
 export default function UserUpdateForm() {
   const apiService: ApiService = new ApiService();
@@ -43,6 +44,7 @@ export default function UserUpdateForm() {
     setUserDataLoggedIn(updatedUserData);
     setLastname('');
     setFirstname('');
+    router.push(TextLinkHrefEnum.profile);
   }
 
   return (
