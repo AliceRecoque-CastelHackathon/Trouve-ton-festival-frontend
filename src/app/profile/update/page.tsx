@@ -66,7 +66,10 @@ export default function ProfileUpdate() {
         <CardContent sx={{ textAlign: 'center' }}>
           <Typography gutterBottom variant="h3" component="div">
             Utilisateur :
-            {userDataLoggedIn?.firstname + ' ' + userDataLoggedIn?.lastname}
+            {userDataLoggedIn?.firstname || userDataLoggedIn?.lastname ?
+              (userDataLoggedIn?.firstname ?? "") + ' ' + (userDataLoggedIn?.lastname ?? "")
+              : userDataLoggedIn?.email
+            }
           </Typography>
           <Typography component="div">
             Veuillez renseigner les champs que vous voulez modifier

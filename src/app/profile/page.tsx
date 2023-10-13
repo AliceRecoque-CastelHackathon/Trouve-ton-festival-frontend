@@ -54,10 +54,10 @@ export default function Profile() {
           </Typography>
           <div>
             <Typography variant="body2" color="text.secondary">
-              Nom : {userDataLoggedIn?.firstname}
+              Nom : {userDataLoggedIn?.firstname ?? "non défini"}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Prénom : {userDataLoggedIn?.lastname}
+              Prénom : {userDataLoggedIn?.lastname ?? "non défini"}
             </Typography>
             <Typography variant="body2" color="text.secondary">
               Email: {userDataLoggedIn?.email}

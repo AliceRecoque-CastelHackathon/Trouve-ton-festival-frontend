@@ -66,10 +66,10 @@ export default function ProfilesList() {
                 Utilisateur
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Nom: {user.lastname}
+                Nom: {user.lastname ?? "non défini"}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Prénom: {user.firstname}
+                Prénom: {user.firstname ?? "non défini"}
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 Prénom: {user.email}
