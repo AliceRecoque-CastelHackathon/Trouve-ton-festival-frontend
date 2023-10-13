@@ -50,19 +50,23 @@ export default function FestivalList() {
   };
   return (
     <>
+    <Container sx={{display: 'flex'}} >
     {loading ?
       <LoadingComponent />
       :
       <>
-      <Button variant="contained" color="success"
-                  href={'./../festival/create?idFestival='}
-                  style={{ textDecoration: 'none', margin: 'auto' }}
-                >
-                  Créer un évenement
-      </Button>
-        <Map
+      <Stack >
+
+        <Button onClick={() => router.push('/festival/create')}>
+          Ajouter un évènement
+        </Button>
+        <Box sx={{position: 'fixed', width: '45vw', left:20}}>
+        <Map 
           festivalArray={festivalArray}
         />
+        </Box>
+      </Stack>
+        <Stack direction={'column'} sx={{width: '45vw', marginLeft: 50}} >
         {festivalArray?.map((festival, index: number) => {
           console.log(festival);
           const handleClickOnMap = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -71,15 +75,14 @@ export default function FestivalList() {
             setMarker(marker);
           };
           return (
-            <Stack key={index} direction={'row-reverse'}>
               <Card
                 key={index}
                 sx={{
                   cursor: 'pointer',
                   marginTop: 2,
                   marginLeft: 2,
-                  display: 'flex',
                   borderRadius: 2,
+                  display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -89,14 +92,14 @@ export default function FestivalList() {
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
                     Festival
-                  <Typography variant="body2" color="text.secondary">
                   </Typography>
+                  <Typography variant="body2" color="text.secondary">
                     Nom: {festival.name}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     Lieu: {festival.adress}
-                  <Typography variant="body2" color="text.secondary">
                   </Typography>
+                  <Typography variant="body2" color="text.secondary">
                     Date: {festival.creationDate}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
@@ -110,13 +113,16 @@ export default function FestivalList() {
                   >
                     Details
                   </Link>
-              </Card>
                 </CardActions>
-            </Stack>
+              </Card>
+
           );
         })}
+          </Stack>
       </>
     }
+    
+    </Container>
     </>
   );
 }
