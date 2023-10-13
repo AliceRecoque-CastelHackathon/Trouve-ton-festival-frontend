@@ -27,7 +27,7 @@ interface AuthformPros {
 }
 
 export default function AuthForm(props: AuthformPros) {
-  const apiService: ApiService = new ApiService('http://localhost:3003');
+  const apiService: ApiService = new ApiService();
   const router = useRouter();
   const searchParams = useSearchParams();
 
