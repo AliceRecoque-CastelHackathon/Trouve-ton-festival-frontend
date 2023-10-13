@@ -14,6 +14,7 @@ import Link from 'next/link';
 import { Button, Stack } from '@mui/material';
 import Map from '@/components/festivalPage/Map';
 import { useRouter } from 'next/navigation';
+import LoadingComponent from '@/components/loading';
 
 export default function FestivalList() {
   const router = useRouter();
@@ -49,62 +50,70 @@ export default function FestivalList() {
   };
   return (
     <>
-      <Button onClick={() => router.push('/festival/create')}>
-        Ajouter un évènement
-      </Button>
-      <Map />
-      {festivalArray?.map((festival, index: number) => {
-        console.log(festival);
-        const handleClickOnMap = (event: React.MouseEvent<HTMLDivElement>) => {
-          setGeoPosX(festival.geoPosX);
-          setGeoPosY(festival.geoPosY);
-          setMarker(marker);
-        };
-        return (
-          <Stack key={index} direction={'row-reverse'}>
-            <Card
-              key={index}
-              sx={{
-                cursor: 'pointer',
-                marginTop: 2,
-                marginLeft: 2,
-                borderRadius: 2,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-              onClick={handleClickOnMap}
-            >
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  Festival
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Nom: {festival.name}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Lieu: {festival.address + festival.zipcode}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Date: {festival.creationDate}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Site internet: {festival.website}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Link
-                  href={'./../festival/detail?idFestival=' + festival.id}
-                  style={{ textDecoration: 'none', margin: 'auto' }}
-                >
-                  Details
-                </Link>
-              </CardActions>
-            </Card>
-          </Stack>
-        );
-      })}
+    {loading ?
+      <LoadingComponent />
+      :
+      <>
+        <Button onClick={() => router.push('/festival/create')}>
+          Ajouter un évènement
+        </Button>
+        <Map
+          festivalList={festivalArray}
+        />
+        {festivalArray?.map((festival, index: number) => {
+          console.log(festival);
+          const handleClickOnMap = (event: React.MouseEvent<HTMLDivElement>) => {
+            setGeoPosX(festival.geoPosX);
+            setGeoPosY(festival.geoPosY);
+            setMarker(marker);
+          };
+          return (
+            <Stack key={index} direction={'row-reverse'}>
+              <Card
+                key={index}
+                sx={{
+                  cursor: 'pointer',
+                  marginTop: 2,
+                  marginLeft: 2,
+                  borderRadius: 2,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                onClick={handleClickOnMap}
+              >
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    Festival
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Nom: {festival.name}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Lieu: {festival.adress}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Date: {festival.creationDate}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Site internet: {festival.website}
+                  </Typography>
+                </CardContent>
+                <CardActions>
+                  <Link
+                    href={'./../festival/detail?idFestival=' + festival.id}
+                    style={{ textDecoration: 'none', margin: 'auto' }}
+                  >
+                    Details
+                  </Link>
+                </CardActions>
+              </Card>
+            </Stack>
+          );
+        })}
+      </>
+    }
     </>
   );
 }

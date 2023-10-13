@@ -32,6 +32,11 @@ export default function Map() {
     }),
     [],
   );
+
+  useEffect(() => {
+
+  }, []);
+
   if (isLoaded)
     return (
       <GoogleMap
