@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import {
   ApiService,
-  FestivalCreateDto,
+  // FestivalCreateDto,
   UserGetDto,
   UserUpdateDto,
 } from '../../services/api.service';
@@ -35,157 +35,157 @@ export default function UserUpdateForm() {
   const { userDataLoggedIn, setUserDataLoggedIn } = useUserContext();
   const path = usePathname();
 
-  async function handleSubmitForm() {
+  // async function handleSubmitForm() {
     //send Data over server
-    if (path === '/festival/update') {
-      const updatedUser: UserUpdateDto = new UserUpdateDto({
-        id: userDataLoggedIn!.id,
-        email: userDataLoggedIn!.email,
-        lastname: !ToolBoxService.stringIsNullOrWhiteSpace(lastname)
-          ? lastname
-          : userDataLoggedIn?.lastname,
-        firstname: !ToolBoxService.stringIsNullOrWhiteSpace(firstname)
-          ? firstname
-          : userDataLoggedIn?.firstname,
-      });
+//     if (path === '/festival/update') {
+//       const updatedUser: UserUpdateDto = new UserUpdateDto({
+//         id: userDataLoggedIn!.id,
+//         email: userDataLoggedIn!.email,
+//         lastname: !ToolBoxService.stringIsNullOrWhiteSpace(lastname)
+//           ? lastname
+//           : userDataLoggedIn?.lastname,
+//         firstname: !ToolBoxService.stringIsNullOrWhiteSpace(firstname)
+//           ? firstname
+//           : userDataLoggedIn?.firstname,
+//       });
 
-      const updatedFestivalData: UserGetDto =
-        await apiService.userUpdate(updatedUser);
-      setUserDataLoggedIn(updatedFestivalData);
-      setLastname('');
-      setFirstname('');
-      setFestivalName('');
-      setFestivalAdress('');
-      setFestivalWeb('');
-      setFestivalEmail('');
-      setFestivalCategorie('');
-      setFestivalOrganisateur('');
-      setFestivalDate('');
-    } else if (path === '/festival/create') { 
-      const createdFestival: FestivalCreateDto = new FestivalCreateDto({
-        setFestivalName('');
-        setFestivalAdress('');
-        setFestivalWeb('');
-        setFestivalEmail('');
-        setFestivalCategorie('');
-        setFestivalOrganisateur('');
-        setFestivalDate('');
-  setRegion('') ;
-  setDepartment('') ;
-        setZipcode("");
-  setCreationDate("");
-  setGeoPosX("");
-  setGeoPosY("");
-      });
+//       const updatedFestivalData: UserGetDto =
+//         await apiService.userUpdate(updatedUser);
+//       setUserDataLoggedIn(updatedFestivalData);
+//       setLastname('');
+//       setFirstname('');
+//       setFestivalName('');
+//       setFestivalAdress('');
+//       setFestivalWeb('');
+//       setFestivalEmail('');
+//       setFestivalCategorie('');
+//       setFestivalOrganisateur('');
+//       setFestivalDate('');
+//     } else if (path === '/festival/create') { 
+//       const createdFestival: FestivalCreateDto = new FestivalCreateDto({
+//         setFestivalName('');
+//         setFestivalAdress('');
+//         setFestivalWeb('');
+//         setFestivalEmail('');
+//         setFestivalCategorie('');
+//         setFestivalOrganisateur('');
+//         setFestivalDate('');
+//   setRegion('') ;
+//   setDepartment('') ;
+//         setZipcode("");
+//   setCreationDate("");
+//   setGeoPosX("");
+//   setGeoPosY("");
+//       });
 
-      const updatedFestivalData: UserGetDto =
-        await apiService.userUpdate(updatedUser);
-      setUserDataLoggedIn(updatedFestivalData);
-      setLastname('');
-      setFirstname('');
-      setFestivalName('');
-      setFestivalAdress('');
-      setFestivalWeb('');
-      setFestivalEmail('');
-      setFestivalCategorie('');
-      setFestivalOrganisateur('');
-      setFestivalDate('');
-    }
-  }
+//       const updatedFestivalData: UserGetDto =
+//         await apiService.userUpdate(updatedUser);
+//       setUserDataLoggedIn(updatedFestivalData);
+//       setLastname('');
+//       setFirstname('');
+//       setFestivalName('');
+//       setFestivalAdress('');
+//       setFestivalWeb('');
+//       setFestivalEmail('');
+//       setFestivalCategorie('');
+//       setFestivalOrganisateur('');
+//       setFestivalDate('');
+//     }
+//   }
 
-  return (
-    <Container maxWidth="xs">
-      <TextField
-        label="Nom du festival"
-        type="text"
-        value={FestivalName}
-        onChange={(e) => setFestivalName(e.target.value)}
-        fullWidth
-        required
-        margin="normal"
-      />
-      <TextField
-        label="Adress du festival :"
-        type="text"
-        value={FestivalAdress}
-        onChange={(e) => setFestivalAdress(e.target.value)}
-        fullWidth
-        required
-        margin="normal"
-      />
-      <TextField
-        label="Site we du festival :"
-        type="text"
-        value={FestivalWeb}
-        onChange={(e) => setFestivalWeb(e.target.value)}
-        fullWidth
-        required
-        margin="normal"
-      />
-      <TextField
-        label="Email :"
-        type="text"
-        value={FestivalEmail}
-        onChange={(e) => setFestivalEmail(e.target.value)}
-        fullWidth
-        required
-        margin="normal"
-      />
-      <TextField
-        label="Categorie :"
-        type="text"
-        value={FestivalCategorie}
-        onChange={(e) => setFestivalCategorie(e.target.value)}
-        fullWidth
-        required
-        margin="normal"
-      />
-      <TextField
-        label="Organisateur :"
-        type="text"
-        value={FestivalOrganisateur}
-        onChange={(e) => setFestivalOrganisateur(e.target.value)}
-        fullWidth
-        required
-        margin="normal"
-      />
-      <TextField
-        label="Date :"
-        type="text"
-        value={FestivalDate}
-        onChange={(e) => setFestivalDate(e.target.value)}
-        fullWidth
-        required
-        margin="normal"
-      />
-      <Stack
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-        spacing={5}
-      >
-        <Button
-          variant="outlined"
-          color="error"
-          fullWidth
-          size="medium"
-          onClick={() => {
-            router.back();
-          }}
-        >
-          Annuler
-        </Button>
-        <Button
-          type="submit"
-          variant="contained"
-          fullWidth
-          size="medium"
-          color="primary"
-          onClick={handleSubmitForm}
-        >
-          Validez
-        </Button>
-      </Stack>
-    </Container>
-  );
+//   return (
+//     <Container maxWidth="xs">
+//       <TextField
+//         label="Nom du festival"
+//         type="text"
+//         value={FestivalName}
+//         onChange={(e) => setFestivalName(e.target.value)}
+//         fullWidth
+//         required
+//         margin="normal"
+//       />
+//       <TextField
+//         label="Adress du festival :"
+//         type="text"
+//         value={FestivalAdress}
+//         onChange={(e) => setFestivalAdress(e.target.value)}
+//         fullWidth
+//         required
+//         margin="normal"
+//       />
+//       <TextField
+//         label="Site we du festival :"
+//         type="text"
+//         value={FestivalWeb}
+//         onChange={(e) => setFestivalWeb(e.target.value)}
+//         fullWidth
+//         required
+//         margin="normal"
+//       />
+//       <TextField
+//         label="Email :"
+//         type="text"
+//         value={FestivalEmail}
+//         onChange={(e) => setFestivalEmail(e.target.value)}
+//         fullWidth
+//         required
+//         margin="normal"
+//       />
+//       <TextField
+//         label="Categorie :"
+//         type="text"
+//         value={FestivalCategorie}
+//         onChange={(e) => setFestivalCategorie(e.target.value)}
+//         fullWidth
+//         required
+//         margin="normal"
+//       />
+//       <TextField
+//         label="Organisateur :"
+//         type="text"
+//         value={FestivalOrganisateur}
+//         onChange={(e) => setFestivalOrganisateur(e.target.value)}
+//         fullWidth
+//         required
+//         margin="normal"
+//       />
+//       <TextField
+//         label="Date :"
+//         type="text"
+//         value={FestivalDate}
+//         onChange={(e) => setFestivalDate(e.target.value)}
+//         fullWidth
+//         required
+//         margin="normal"
+//       />
+//       <Stack
+//         direction="row"
+//         justifyContent="center"
+//         alignItems="center"
+//         spacing={5}
+//       >
+//         <Button
+//           variant="outlined"
+//           color="error"
+//           fullWidth
+//           size="medium"
+//           onClick={() => {
+//             router.back();
+//           }}
+//         >
+//           Annuler
+//         </Button>
+//         <Button
+//           type="submit"
+//           variant="contained"
+//           fullWidth
+//           size="medium"
+//           color="primary"
+//           onClick={handleSubmitForm}
+//         >
+//           Validez
+//         </Button>
+//       </Stack>
+//     </Container>
+//   );
 }

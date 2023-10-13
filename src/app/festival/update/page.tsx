@@ -7,7 +7,6 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import UploadFileComponent from '@/components/file/UploadFile';
-import FestivalUpdateForm from '@/components/festival/festivalUpdateForm';
 import Image, { ImageLoader } from 'next/image';
 import { IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
@@ -74,7 +73,7 @@ export default function FestivalUpdate() {
           </Typography>
         </CardContent>
         <CardActions>
-          <FestivalUpdateForm />
+          {/* <FestivalUpdateForm /> */}
         </CardActions>
       </Card>
       {isFileUploadVisible ? (

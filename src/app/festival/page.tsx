@@ -11,7 +11,7 @@ import {
   FestivalGetDto,
 } from '../../services/api.service';
 import Link from 'next/link';
-import { Button, Stack } from '@mui/material';
+import { Box, Button, Container, Stack } from '@mui/material';
 import Map from '@/components/festivalPage/Map';
 import { useRouter } from 'next/navigation';
 import LoadingComponent from '@/components/loading';
@@ -54,9 +54,12 @@ export default function FestivalList() {
       <LoadingComponent />
       :
       <>
-        <Button onClick={() => router.push('/festival/create')}>
-          Ajouter un évènement
-        </Button>
+      <Button variant="contained" color="success"
+                  href={'./../festival/create?idFestival='}
+                  style={{ textDecoration: 'none', margin: 'auto' }}
+                >
+                  Créer un évenement
+      </Button>
         <Map
           festivalArray={festivalArray}
         />
@@ -75,8 +78,8 @@ export default function FestivalList() {
                   cursor: 'pointer',
                   marginTop: 2,
                   marginLeft: 2,
-                  borderRadius: 2,
                   display: 'flex',
+                  borderRadius: 2,
                   flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -86,14 +89,14 @@ export default function FestivalList() {
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
                     Festival
-                  </Typography>
                   <Typography variant="body2" color="text.secondary">
+                  </Typography>
                     Nom: {festival.name}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     Lieu: {festival.adress}
-                  </Typography>
                   <Typography variant="body2" color="text.secondary">
+                  </Typography>
                     Date: {festival.creationDate}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
@@ -107,8 +110,8 @@ export default function FestivalList() {
                   >
                     Details
                   </Link>
-                </CardActions>
               </Card>
+                </CardActions>
             </Stack>
           );
         })}
