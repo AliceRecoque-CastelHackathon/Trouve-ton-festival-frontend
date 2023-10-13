@@ -1,5 +1,7 @@
 import { FestivalGetDto } from '@/services/api.service';
+import { TextLinkHrefEnum } from '@/utils/enums/text-link-href';
 import { GoogleMap, useLoadScript } from '@react-google-maps/api';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
 
 interface IMapProps {
@@ -7,8 +9,9 @@ interface IMapProps {
 }
 
 export default function Map(props: IMapProps) {
-  const [geoPosX, setGeoPosX] = useState(0);
-  const [geoPosY, setGeoPosY] = useState(0);
+  const router = useRouter();
+  const [geoPosX, setGeoPosX] = useState(3.900041);
+  const [geoPosY, setGeoPosY] = useState(43.6323496);
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const libraries = useMemo(() => ['places'], []);
   const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
@@ -24,9 +27,6 @@ export default function Map(props: IMapProps) {
         setGeoPosX(position.coords.longitude);
         setGeoPosY(position.coords.latitude);
       });
-    } else {
-      setGeoPosX(3.900041);
-      setGeoPosY(43.6323496);
     }
   }, []);
 
@@ -34,14 +34,26 @@ export default function Map(props: IMapProps) {
     if (isLoaded && map) {
       let markers: google.maps.Marker[] = [];
       props.festivalArray.forEach((festival: FestivalGetDto) => {
+        const infowindow = new google.maps.InfoWindow({
+          content: festival.name,
+          ariaLabel: "Uluru",
+        });
         const newMarker = new google.maps.Marker({
           position: { lat: festival.geoPosY, lng: festival.geoPosX},
           map: map,
-          title: festival.name
+          title: festival.name,
         });
+
+        newMarker.addListener('click', () => {
+          infowindow.open({
+            anchor: newMarker,
+            map: map,
+          });
+          // router.push(`${TextLinkHrefEnum.festival}?idFestival=${festival.id}`);
+        });
+
         markers.push(newMarker);
       });
-      console.log(markers)
       setMarkers(markers);
     }
   }, [props.festivalArray, isLoaded, map]);
