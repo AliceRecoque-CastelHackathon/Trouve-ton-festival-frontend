@@ -24,6 +24,8 @@ export default function Home() {
     if (token) {
       const decodedToken = jwt_decode<customJwtPayload>(token);
       const userData = await apiService.userById(decodedToken.userId);
+      console.log(userData);
+
       setUserDataLoggedIn(userData);
     }
   };
@@ -33,7 +35,6 @@ export default function Home() {
       <NavBar />
       <Container>
         <Typography>
-          {' '}
           Bonjour {userDataLoggedIn.firstname ?? userDataLoggedIn.email}
         </Typography>
       </Container>
