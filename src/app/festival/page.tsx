@@ -110,8 +110,8 @@ export default function FestivalList() {
                   >
                     Details
                   </Link>
-              </Card>
                 </CardActions>
+              </Card>
             </Stack>
           );
         })}
