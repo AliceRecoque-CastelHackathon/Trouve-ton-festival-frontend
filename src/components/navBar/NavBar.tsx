@@ -15,7 +15,15 @@ const NavBar = () => {
 
   return userDataLoggedIn ? (
     <>
-      <AppBar color="inherit">
+      <AppBar
+        sx={{
+          height: '40px',
+          display: 'flex',
+          alignItems: 'space-evenly',
+          justifyContent: 'center',
+        }}
+        color="primary"
+      >
         <Stack justifyContent={'space-between'} direction={'row'}>
           <IconButton onClick={() => router.push(TextLinkHrefEnum.home)}>
             <HomeIcon />

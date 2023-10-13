@@ -16,7 +16,6 @@ export default function Map() {
     }
   }, []);
   const libraries = useMemo(() => ['places'], []);
-  const [marker, setMarker] = React.useState<google.maps.Marker>();
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY as string,
