@@ -3,11 +3,11 @@ import React from 'react';
 import AuthForm from '../../../components/auth/AuthForm';
 import TextLinkComponent from '@/components/text/text-link';
 import { TextLinkHrefEnum } from '@/utils/enums/text-link-href';
-import { Typography } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 
 export default function login() {
   return (
-    <>
+    <Container sx={{paddingTop: 5}}>
       <Typography variant="h4" align="center" gutterBottom>
         Connexion
       </Typography>
@@ -20,6 +20,6 @@ export default function login() {
         href={TextLinkHrefEnum.forgotPwd}
         text="Vous avez oubliez votre mot de passe ? par ici !"
       />
-    </>
+    </Container>
   );
 }

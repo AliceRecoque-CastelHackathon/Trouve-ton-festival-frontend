@@ -20,7 +20,7 @@ const NavBar = () => {
           height: '40px',
           display: 'flex',
           alignItems: 'space-evenly',
-          justifyContent: 'center',
+          justifyContent: 'center'
         }}
         color="primary"
       >

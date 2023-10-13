@@ -22,11 +22,11 @@ export default function SearchBar() {
   };
 
   return (
-    <Box sx={{ alignItems: 'center', justifyContent: 'center' }}>
+    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <TextField
         id="input-with-icon-textfield"
         size="small"
-        sx={{ alignItems: 'center', justifyContent: 'center' }}
+        sx={{backgroundColor: 'white'}}
         variant="standard"
         onChange={(e) => {
           setFestivalName(e.target.value);

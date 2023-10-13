@@ -52,6 +52,7 @@ export default function Festival() {
         justifyContent: 'center',
         alignItems: 'center',
         height: '100vh',
+        paddingTop: 5
       }}
     >
       <Card

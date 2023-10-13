@@ -33,7 +33,7 @@ export default function Home() {
   return userDataLoggedIn ? (
     <>
       <NavBar />
-      <Container>
+      <Container sx={{paddingTop: 5}}>
         <Typography>
           Bonjour {userDataLoggedIn.firstname ?? userDataLoggedIn.email}
         </Typography>
@@ -41,7 +41,7 @@ export default function Home() {
     </>
   ) : (
     <>
-      <Container>
+      <Container sx={{paddingTop: 5}}>
         <h1>Veuillez vous connecter</h1>
         <Button color="inherit" onClick={() => router.push('/login')}>
           Login

@@ -27,6 +27,7 @@ export default function Profile() {
         justifyContent: 'center',
         alignItems: 'center',
         height: '100vh',
+        paddingTop: 5
       }}
     >
       <Card
