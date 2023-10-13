@@ -69,6 +69,7 @@ export class ApiService {
         });
     }
 
+<<<<<<< HEAD
     protected processUserAll(response: AxiosResponse): Promise<UserGetDto[]> {
         const status = response.status;
         let _headers: any = {};
@@ -127,184 +128,12 @@ export class ApiService {
     }
 
     protected processUserById(response: AxiosResponse): Promise<UserGetDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        {
-            const _responseText = response.data;
-            let resultdefault: any = null;
-            let resultDatadefault  = _responseText;
-            resultdefault = UserGetDto.fromJS(resultDatadefault);
-            return Promise.resolve<UserGetDto>(resultdefault);
-
-        }
-    }
-
+=======
     /**
-     * @return The user with specified email
+     * @return A list of all users
      */
-    userByEmail(body: StringEmailDto, cancelToken?: CancelToken | undefined): Promise<UserGetDto> {
-        let url_ = this.baseUrl + "/user/byEmail";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "POST",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processUserByEmail(_response);
-        });
-    }
-
-    protected processUserByEmail(response: AxiosResponse): Promise<UserGetDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        {
-            const _responseText = response.data;
-            let resultdefault: any = null;
-            let resultDatadefault  = _responseText;
-            resultdefault = UserGetDto.fromJS(resultDatadefault);
-            return Promise.resolve<UserGetDto>(resultdefault);
-
-        }
-    }
-
-    /**
-     * @return The updated user
-     */
-    userUpdate(body: UserUpdateDto, cancelToken?: CancelToken | undefined): Promise<UserGetDto> {
-        let url_ = this.baseUrl + "/user/update";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "PUT",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processUserUpdate(_response);
-        });
-    }
-
-    protected processUserUpdate(response: AxiosResponse): Promise<UserGetDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        {
-            const _responseText = response.data;
-            let resultdefault: any = null;
-            let resultDatadefault  = _responseText;
-            resultdefault = UserGetDto.fromJS(resultDatadefault);
-            return Promise.resolve<UserGetDto>(resultdefault);
-
-        }
-    }
-
-    /**
-     * @param file (optional)
-     * @return Upload avatar image for a user
-     */
-    userUploadAvatar(file: FileParameter | undefined, cancelToken?: CancelToken | undefined): Promise<UserGetDto> {
-        let url_ = this.baseUrl + "/user/uploadAvatar";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = new FormData();
-        if (file === null || file === undefined)
-            throw new Error("The parameter 'file' cannot be null.");
-        else
-            content_.append("file", file.data, file.fileName ? file.fileName : "file");
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "POST",
-            url: url_,
-            headers: {
-                "Accept": "application/json"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processUserUploadAvatar(_response);
-        });
-    }
-
-    protected processUserUploadAvatar(response: AxiosResponse): Promise<UserGetDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        {
-            const _responseText = response.data;
-            let resultdefault: any = null;
-            let resultDatadefault  = _responseText;
-            resultdefault = UserGetDto.fromJS(resultDatadefault);
-            return Promise.resolve<UserGetDto>(resultdefault);
-
-        }
-    }
-
-    authTest( cancelToken?: CancelToken | undefined): Promise<any> {
-        let url_ = this.baseUrl + "/auth/test";
+    userAll( cancelToken?: CancelToken | undefined): Promise<UserGetDto[]> {
+        let url_ = this.baseUrl + "/user/all";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
@@ -323,11 +152,12 @@ export class ApiService {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processAuthTest(_response);
+            return this.processUserAll(_response);
         });
     }
 
-    protected processAuthTest(response: AxiosResponse): Promise<any> {
+    protected processUserAll(response: AxiosResponse): Promise<UserGetDto[]> {
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -337,6 +167,316 @@ export class ApiService {
                 }
             }
         }
+        {
+            const _responseText = response.data;
+            let resultdefault: any = null;
+            let resultDatadefault  = _responseText;
+<<<<<<< HEAD
+            resultdefault = UserGetDto.fromJS(resultDatadefault);
+            return Promise.resolve<UserGetDto>(resultdefault);
+=======
+            if (Array.isArray(resultDatadefault)) {
+                resultdefault = [] as any;
+                for (let item of resultDatadefault)
+                    resultdefault!.push(UserGetDto.fromJS(item));
+            }
+            else {
+                resultdefault = <any>null;
+            }
+            return Promise.resolve<UserGetDto[]>(resultdefault);
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
+
+        }
+    }
+
+    /**
+<<<<<<< HEAD
+     * @return The user with specified email
+     */
+    userByEmail(body: StringEmailDto, cancelToken?: CancelToken | undefined): Promise<UserGetDto> {
+        let url_ = this.baseUrl + "/user/byEmail";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+=======
+     * @return The user with specified id
+     */
+    userById(id: number, cancelToken?: CancelToken | undefined): Promise<UserGetDto> {
+        let url_ = this.baseUrl + "/user/byId/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+<<<<<<< HEAD
+            return this.processUserByEmail(_response);
+        });
+    }
+
+    protected processUserByEmail(response: AxiosResponse): Promise<UserGetDto> {
+=======
+            return this.processUserById(_response);
+        });
+    }
+
+    protected processUserById(response: AxiosResponse): Promise<UserGetDto> {
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        {
+            const _responseText = response.data;
+            let resultdefault: any = null;
+            let resultDatadefault  = _responseText;
+            resultdefault = UserGetDto.fromJS(resultDatadefault);
+            return Promise.resolve<UserGetDto>(resultdefault);
+
+        }
+    }
+
+    /**
+<<<<<<< HEAD
+     * @return The updated user
+     */
+    userUpdate(body: UserUpdateDto, cancelToken?: CancelToken | undefined): Promise<UserGetDto> {
+        let url_ = this.baseUrl + "/user/update";
+=======
+     * @return The user with specified email
+     */
+    userByEmail(body: StringEmailDto, cancelToken?: CancelToken | undefined): Promise<UserGetDto> {
+        let url_ = this.baseUrl + "/user/byEmail";
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+<<<<<<< HEAD
+            method: "PUT",
+=======
+            method: "POST",
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+<<<<<<< HEAD
+            return this.processUserUpdate(_response);
+        });
+    }
+
+    protected processUserUpdate(response: AxiosResponse): Promise<UserGetDto> {
+=======
+            return this.processUserByEmail(_response);
+        });
+    }
+
+    protected processUserByEmail(response: AxiosResponse): Promise<UserGetDto> {
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        {
+            const _responseText = response.data;
+            let resultdefault: any = null;
+            let resultDatadefault  = _responseText;
+            resultdefault = UserGetDto.fromJS(resultDatadefault);
+            return Promise.resolve<UserGetDto>(resultdefault);
+
+        }
+    }
+
+    /**
+<<<<<<< HEAD
+     * @param file (optional)
+     * @return Upload avatar image for a user
+     */
+    userUploadAvatar(file: FileParameter | undefined, cancelToken?: CancelToken | undefined): Promise<UserGetDto> {
+        let url_ = this.baseUrl + "/user/uploadAvatar";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = new FormData();
+        if (file === null || file === undefined)
+            throw new Error("The parameter 'file' cannot be null.");
+        else
+            content_.append("file", file.data, file.fileName ? file.fileName : "file");
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+=======
+     * @return The updated user
+     */
+    userUpdate(body: UserUpdateDto, cancelToken?: CancelToken | undefined): Promise<UserGetDto> {
+        let url_ = this.baseUrl + "/user/update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "PUT",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+<<<<<<< HEAD
+            return this.processUserUploadAvatar(_response);
+        });
+    }
+
+    protected processUserUploadAvatar(response: AxiosResponse): Promise<UserGetDto> {
+=======
+            return this.processUserUpdate(_response);
+        });
+    }
+
+    protected processUserUpdate(response: AxiosResponse): Promise<UserGetDto> {
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        {
+            const _responseText = response.data;
+            let resultdefault: any = null;
+            let resultDatadefault  = _responseText;
+            resultdefault = UserGetDto.fromJS(resultDatadefault);
+            return Promise.resolve<UserGetDto>(resultdefault);
+
+        }
+    }
+
+<<<<<<< HEAD
+    authTest( cancelToken?: CancelToken | undefined): Promise<any> {
+        let url_ = this.baseUrl + "/auth/test";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+=======
+    /**
+     * @param file (optional)
+     * @return Upload avatar image for a user
+     */
+    userUploadAvatar(file: FileParameter | undefined, cancelToken?: CancelToken | undefined): Promise<UserGetDto> {
+        let url_ = this.baseUrl + "/user/uploadAvatar";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = new FormData();
+        if (file === null || file === undefined)
+            throw new Error("The parameter 'file' cannot be null.");
+        else
+            content_.append("file", file.data, file.fileName ? file.fileName : "file");
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "POST",
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+<<<<<<< HEAD
+            return this.processAuthTest(_response);
+        });
+    }
+
+    protected processAuthTest(response: AxiosResponse): Promise<any> {
+=======
+            return this.processUserUploadAvatar(_response);
+        });
+    }
+
+    protected processUserUploadAvatar(response: AxiosResponse): Promise<UserGetDto> {
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+<<<<<<< HEAD
         if (status === 200) {
             const _responseText = response.data;
             let result200: any = null;
@@ -364,6 +504,26 @@ export class ApiService {
             url: url_,
             headers: {
                 "Content-Type": "application/json",
+=======
+        {
+            const _responseText = response.data;
+            let resultdefault: any = null;
+            let resultDatadefault  = _responseText;
+            resultdefault = UserGetDto.fromJS(resultDatadefault);
+            return Promise.resolve<UserGetDto>(resultdefault);
+
+        }
+    }
+
+    authTest( cancelToken?: CancelToken | undefined): Promise<any> {
+        let url_ = this.baseUrl + "/auth/test";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
                 "Accept": "application/json"
             },
             cancelToken
@@ -376,11 +536,19 @@ export class ApiService {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
+<<<<<<< HEAD
             return this.processAuthSignUp(_response);
         });
     }
 
     protected processAuthSignUp(response: AxiosResponse): Promise<UserGetDto> {
+=======
+            return this.processAuthTest(_response);
+        });
+    }
+
+    protected processAuthTest(response: AxiosResponse): Promise<any> {
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -390,6 +558,7 @@ export class ApiService {
                 }
             }
         }
+<<<<<<< HEAD
         if (status === 201) {
             const _responseText = response.data;
             let result201: any = null;
@@ -397,15 +566,33 @@ export class ApiService {
             result201 = UserGetDto.fromJS(resultData201);
             return Promise.resolve<UserGetDto>(result201);
 
+=======
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+
+            return Promise.resolve<any>(result200);
+
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
+<<<<<<< HEAD
         return Promise.resolve<UserGetDto>(null as any);
     }
 
     authSignIn(body: LoginDto, cancelToken?: CancelToken | undefined): Promise<AccessTokenDto> {
         let url_ = this.baseUrl + "/auth/signIn";
+=======
+        return Promise.resolve<any>(null as any);
+    }
+
+    authSignUp(body: RegisterDto, cancelToken?: CancelToken | undefined): Promise<UserGetDto> {
+        let url_ = this.baseUrl + "/auth/signUp";
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -428,11 +615,19 @@ export class ApiService {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
+<<<<<<< HEAD
             return this.processAuthSignIn(_response);
         });
     }
 
     protected processAuthSignIn(response: AxiosResponse): Promise<AccessTokenDto> {
+=======
+            return this.processAuthSignUp(_response);
+        });
+    }
+
+    protected processAuthSignUp(response: AxiosResponse): Promise<UserGetDto> {
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -442,22 +637,39 @@ export class ApiService {
                 }
             }
         }
+<<<<<<< HEAD
         if (status === 200) {
             const _responseText = response.data;
             let result200: any = null;
             let resultData200  = _responseText;
             result200 = AccessTokenDto.fromJS(resultData200);
             return Promise.resolve<AccessTokenDto>(result200);
+=======
+        if (status === 201) {
+            const _responseText = response.data;
+            let result201: any = null;
+            let resultData201  = _responseText;
+            result201 = UserGetDto.fromJS(resultData201);
+            return Promise.resolve<UserGetDto>(result201);
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
 
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
+<<<<<<< HEAD
         return Promise.resolve<AccessTokenDto>(null as any);
     }
 
     authForgotPwd(body: StringEmailDto, cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/auth/forgotPwd";
+=======
+        return Promise.resolve<UserGetDto>(null as any);
+    }
+
+    authSignIn(body: LoginDto, cancelToken?: CancelToken | undefined): Promise<AccessTokenDto> {
+        let url_ = this.baseUrl + "/auth/signIn";
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -468,6 +680,10 @@ export class ApiService {
             url: url_,
             headers: {
                 "Content-Type": "application/json",
+<<<<<<< HEAD
+=======
+                "Accept": "application/json"
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
             },
             cancelToken
         };
@@ -479,11 +695,19 @@ export class ApiService {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
+<<<<<<< HEAD
             return this.processAuthForgotPwd(_response);
         });
     }
 
     protected processAuthForgotPwd(response: AxiosResponse): Promise<void> {
+=======
+            return this.processAuthSignIn(_response);
+        });
+    }
+
+    protected processAuthSignIn(response: AxiosResponse): Promise<AccessTokenDto> {
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -495,17 +719,32 @@ export class ApiService {
         }
         if (status === 200) {
             const _responseText = response.data;
+<<<<<<< HEAD
             return Promise.resolve<void>(null as any);
+=======
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = AccessTokenDto.fromJS(resultData200);
+            return Promise.resolve<AccessTokenDto>(result200);
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
 
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
+<<<<<<< HEAD
         return Promise.resolve<void>(null as any);
     }
 
     authResetPwd(body: ResetPwdDto, cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/auth/resetPwd";
+=======
+        return Promise.resolve<AccessTokenDto>(null as any);
+    }
+
+    authForgotPwd(body: StringEmailDto, cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/auth/forgotPwd";
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -527,11 +766,19 @@ export class ApiService {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
+<<<<<<< HEAD
             return this.processAuthResetPwd(_response);
         });
     }
 
     protected processAuthResetPwd(response: AxiosResponse): Promise<void> {
+=======
+            return this.processAuthForgotPwd(_response);
+        });
+    }
+
+    protected processAuthForgotPwd(response: AxiosResponse): Promise<void> {
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -552,11 +799,16 @@ export class ApiService {
         return Promise.resolve<void>(null as any);
     }
 
+<<<<<<< HEAD
     /**
      * @return A list of festival
      */
     festivalGetMany(body: FestivalGetManyDto, cancelToken?: CancelToken | undefined): Promise<FestivalGetDto[]> {
         let url_ = this.baseUrl + "/festival/getMany";
+=======
+    authResetPwd(body: ResetPwdDto, cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/auth/resetPwd";
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -567,7 +819,10 @@ export class ApiService {
             url: url_,
             headers: {
                 "Content-Type": "application/json",
+<<<<<<< HEAD
                 "Accept": "application/json"
+=======
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
             },
             cancelToken
         };
@@ -579,11 +834,19 @@ export class ApiService {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
+<<<<<<< HEAD
             return this.processFestivalGetMany(_response);
         });
     }
 
     protected processFestivalGetMany(response: AxiosResponse): Promise<FestivalGetDto[]> {
+=======
+            return this.processAuthResetPwd(_response);
+        });
+    }
+
+    protected processAuthResetPwd(response: AxiosResponse): Promise<void> {
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -593,6 +856,7 @@ export class ApiService {
                 }
             }
         }
+<<<<<<< HEAD
         {
             const _responseText = response.data;
             let resultdefault: any = null;
@@ -624,6 +888,34 @@ export class ApiService {
             method: "GET",
             url: url_,
             headers: {
+=======
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @return A list of festival
+     */
+    festivalGetMany(body: FestivalGetManyDto, cancelToken?: CancelToken | undefined): Promise<FestivalGetDto[]> {
+        let url_ = this.baseUrl + "/festival/getMany";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
                 "Accept": "application/json"
             },
             cancelToken
@@ -636,11 +928,19 @@ export class ApiService {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
+<<<<<<< HEAD
             return this.processFestivalById(_response);
         });
     }
 
     protected processFestivalById(response: AxiosResponse): Promise<FestivalGetDto> {
+=======
+            return this.processFestivalGetMany(_response);
+        });
+    }
+
+    protected processFestivalGetMany(response: AxiosResponse): Promise<FestivalGetDto[]> {
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -654,8 +954,20 @@ export class ApiService {
             const _responseText = response.data;
             let resultdefault: any = null;
             let resultDatadefault  = _responseText;
+<<<<<<< HEAD
             resultdefault = FestivalGetDto.fromJS(resultDatadefault);
             return Promise.resolve<FestivalGetDto>(resultdefault);
+=======
+            if (Array.isArray(resultDatadefault)) {
+                resultdefault = [] as any;
+                for (let item of resultDatadefault)
+                    resultdefault!.push(FestivalGetDto.fromJS(item));
+            }
+            else {
+                resultdefault = <any>null;
+            }
+            return Promise.resolve<FestivalGetDto[]>(resultdefault);
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
 
         }
     }
@@ -705,6 +1017,176 @@ export class ApiService {
             const _responseText = response.data;
             let resultdefault: any = null;
             let resultDatadefault  = _responseText;
+            resultdefault = FestivalGetDto.fromJS(resultDatadefault);
+            return Promise.resolve<FestivalGetDto>(resultdefault);
+
+        }
+    }
+
+    /**
+     * @return The created festival
+     */
+    festivalCreatePost(body: FestivalCreateDto, cancelToken?: CancelToken | undefined): Promise<FestivalGetDto[]> {
+        let url_ = this.baseUrl + "/festival/create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+=======
+     * @return The festival with specified id
+     */
+    festivalById(id: number, cancelToken?: CancelToken | undefined): Promise<FestivalGetDto> {
+        let url_ = this.baseUrl + "/festival/byId/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+<<<<<<< HEAD
+            return this.processFestivalCreatePost(_response);
+        });
+    }
+
+    protected processFestivalCreatePost(response: AxiosResponse): Promise<FestivalGetDto[]> {
+=======
+            return this.processFestivalById(_response);
+        });
+    }
+
+    protected processFestivalById(response: AxiosResponse): Promise<FestivalGetDto> {
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        {
+            const _responseText = response.data;
+            let resultdefault: any = null;
+            let resultDatadefault  = _responseText;
+<<<<<<< HEAD
+            if (Array.isArray(resultDatadefault)) {
+                resultdefault = [] as any;
+                for (let item of resultDatadefault)
+                    resultdefault!.push(FestivalGetDto.fromJS(item));
+            }
+            else {
+                resultdefault = <any>null;
+            }
+            return Promise.resolve<FestivalGetDto[]>(resultdefault);
+=======
+            resultdefault = FestivalGetDto.fromJS(resultDatadefault);
+            return Promise.resolve<FestivalGetDto>(resultdefault);
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
+
+        }
+    }
+
+    /**
+<<<<<<< HEAD
+     * @return The created festival
+     */
+    festivalCreatePut(body: FestivalUpdateDto, cancelToken?: CancelToken | undefined): Promise<FestivalGetDto[]> {
+        let url_ = this.baseUrl + "/festival/create";
+=======
+     * @return The festival with specified name
+     */
+    festivalByName(body: FestivalNameDto, cancelToken?: CancelToken | undefined): Promise<FestivalGetDto> {
+        let url_ = this.baseUrl + "/festival/byName";
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+<<<<<<< HEAD
+            method: "PUT",
+=======
+            method: "POST",
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+<<<<<<< HEAD
+            return this.processFestivalCreatePut(_response);
+        });
+    }
+
+    protected processFestivalCreatePut(response: AxiosResponse): Promise<FestivalGetDto[]> {
+=======
+            return this.processFestivalByName(_response);
+        });
+    }
+
+    protected processFestivalByName(response: AxiosResponse): Promise<FestivalGetDto> {
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        {
+            const _responseText = response.data;
+            let resultdefault: any = null;
+            let resultDatadefault  = _responseText;
+<<<<<<< HEAD
+            if (Array.isArray(resultDatadefault)) {
+                resultdefault = [] as any;
+                for (let item of resultDatadefault)
+                    resultdefault!.push(FestivalGetDto.fromJS(item));
+            }
+            else {
+                resultdefault = <any>null;
+            }
+            return Promise.resolve<FestivalGetDto[]>(resultdefault);
+
+        }
+    }
+=======
             resultdefault = FestivalGetDto.fromJS(resultDatadefault);
             return Promise.resolve<FestivalGetDto>(resultdefault);
 
@@ -826,6 +1308,7 @@ export class ApiService {
 
         }
     }
+>>>>>>> 23ef5e2820ce86c4c078a74a3e74aa85e736c972
 }
 
 export class UserGetDto implements IUserGetDto {
@@ -1482,6 +1965,8 @@ export interface IFestivalGetDto {
     dateEnd: moment.Moment;
 
     [key: string]: any;
+<<<<<<< HEAD
+=======
 }
 
 export class FestivalNameDto implements IFestivalNameDto {

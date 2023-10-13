@@ -99,6 +99,12 @@ export default function FestivalList() {
                   style={{ textDecoration: 'none', margin: 'auto' }}
                 >
                   Details
+                </Link><br/>
+                <Link
+                  href={'./../festival/detail?idFestival=' + festival.id}
+                  style={{ textDecoration: 'none', margin: 'auto' }}
+                >
+                  Créer un évenement
                 </Link>
               </CardActions>
             </Card>
